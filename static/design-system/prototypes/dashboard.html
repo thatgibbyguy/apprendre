@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Apprendre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="../../js/app.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header class="sticky" style="top: 0; z-index: 100;">
+    <nav class="navbar navbar-borderless" aria-label="Main navigation">
+      <ul class="phone-hide">
+        <li class="active"><a href="#">Dashboard</a></li>
+        <li><a href="#">Conversations</a></li>
+        <li><a href="#">Review</a></li>
+        <li><a href="#">Carte</a></li>
+      </ul>
+      <details class="tablet-hide desktop-hide">
+        <summary aria-label="Menu">&#9776; Menu</summary>
+        <ul>
+          <li class="active"><a href="#">Dashboard</a></li>
+          <li><a href="#">Conversations</a></li>
+          <li><a href="#">Review</a></li>
+          <li><a href="#">Carte</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="units-container">
+
+      <!-- Welcome -->
+      <section class="padding-top-xl padding-bottom" aria-label="Welcome">
+        <div class="units-row">
+          <div class="unit-100">
+            <p class="text-secondary margin-bottom-xs">Bonjour, welcome back.</p>
+            <h1 class="text-balance">Your French Journey</h1>
+          </div>
+        </div>
+      </section>
+
+      <!-- Primary Action -->
+      <section class="padding-bottom-lg" aria-label="Continue learning">
+        <div class="units-row">
+          <div class="unit-100 tablet-unit-100">
+            <a href="#" class="action-card no-link-style">
+              <div class="action-card__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </div>
+              <div class="action-card__content">
+                <h2 class="action-card__title">Continue where you left off</h2>
+                <p class="action-card__subtitle">Playing with your child at the park — 3 exchanges in</p>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Review + Level Row -->
+      <section class="padding-bottom-lg" aria-label="Quick stats">
+        <div class="units-row">
+          <div class="unit-50 tablet-unit-100">
+            <a href="#" class="action-card no-link-style">
+              <div class="action-card__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              </div>
+              <div class="action-card__content">
+                <h2 class="action-card__title">Due for review</h2>
+                <p class="action-card__subtitle"><span class="review-count__number">12</span> cards ready — about 5 minutes</p>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+            </a>
+          </div>
+          <div class="unit-50 tablet-unit-100">
+            <div class="action-card" style="cursor: default;">
+              <div class="action-card__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div class="action-card__content">
+                <h2 class="action-card__title">Your level</h2>
+                <p class="action-card__subtitle">
+                  Speaking <span class="level-badge text-xs level-badge--a1">A1</span>
+                  Reading <span class="level-badge text-xs level-badge--a2">A2</span>
+                  Listening <span class="level-badge text-xs level-badge--a2">A2</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Carte -->
+      <section class="padding-bottom-xl" aria-label="Your carte — progress overview">
+        <div class="units-row">
+          <div class="unit-100">
+            <div class="display-flex justify-between items-baseline margin-bottom">
+              <h2>Your Carte</h2>
+              <a href="#" class="text-secondary">View full carte</a>
+            </div>
+
+            <div class="carte-legend margin-bottom">
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--strong" aria-hidden="true"></span>
+                Strong
+              </div>
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--working" aria-hidden="true"></span>
+                Working on
+              </div>
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--upcoming" aria-hidden="true"></span>
+                Coming up
+              </div>
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--struggling" aria-hidden="true"></span>
+                Needs work
+              </div>
+            </div>
+
+            <div class="carte-grid" role="list" aria-label="Progress by situation">
+              <div class="carte-cell carte-cell--strong" role="listitem" tabindex="0">
+                <strong>Greetings</strong><br>
+                <span class="carte-cell__detail">Bonjour, ca va...</span>
+              </div>
+              <div class="carte-cell carte-cell--strong" role="listitem" tabindex="0">
+                <strong>Basic needs</strong><br>
+                <span class="carte-cell__detail">J'ai faim, soif...</span>
+              </div>
+              <div class="carte-cell carte-cell--working" role="listitem" tabindex="0">
+                <strong>Playing</strong><br>
+                <span class="carte-cell__detail">Jouer, courir...</span>
+              </div>
+              <div class="carte-cell carte-cell--working" role="listitem" tabindex="0">
+                <strong>Daily routine</strong><br>
+                <span class="carte-cell__detail">Se lever, manger...</span>
+              </div>
+              <div class="carte-cell carte-cell--struggling" role="listitem" tabindex="0">
+                <strong>Past events</strong><br>
+                <span class="carte-cell__detail">Hier, la semaine...</span>
+              </div>
+              <div class="carte-cell carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>At the store</strong><br>
+                <span class="carte-cell__detail">Acheter, payer...</span>
+              </div>
+              <div class="carte-cell carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>Neighbors</strong><br>
+                <span class="carte-cell__detail">Parler, inviter...</span>
+              </div>
+              <div class="carte-cell carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>At the cafe</strong><br>
+                <span class="carte-cell__detail">Commander, payer...</span>
+              </div>
+              <div class="carte-cell carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>Opinions</strong><br>
+                <span class="carte-cell__detail">Je pense que...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Session Summary (last session) -->
+      <section class="padding-bottom-xl" aria-label="Last session summary">
+        <div class="units-row">
+          <div class="unit-60 tablet-unit-100">
+            <div class="session-summary">
+              <h3 class="session-summary__heading">Last session summary</h3>
+              <div class="session-summary__stat">
+                <span class="session-summary__stat-label">Scenario</span>
+                <span class="session-summary__stat-value">Daily routine</span>
+              </div>
+              <div class="session-summary__stat">
+                <span class="session-summary__stat-label">Duration</span>
+                <span class="session-summary__stat-value">7 min</span>
+              </div>
+              <div class="session-summary__stat">
+                <span class="session-summary__stat-label">Exchanges</span>
+                <span class="session-summary__stat-value">8</span>
+              </div>
+              <div class="session-summary__stat">
+                <span class="session-summary__stat-label">New cards created</span>
+                <span class="session-summary__stat-value">3</span>
+              </div>
+              <h4 class="h6 text-secondary margin-top margin-bottom-xs">To work on</h4>
+              <ul class="session-summary__feedback-list">
+                <li class="session-summary__feedback-item">Direct object pronouns (le, la, les) before the verb</li>
+                <li class="session-summary__feedback-item">Reflexive verbs in daily routine context</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="padding-top padding-bottom">
+    <div class="units-container">
+      <p class="text-center text-tertiary">Apprendre — Learn French for your life in Louisiana</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+apprendre.db
+__pycache__/
+*.pyc
+.claude/
+productDocs/resources/
+productDocs/design inspiration/
+*.mp3
+*.pdf

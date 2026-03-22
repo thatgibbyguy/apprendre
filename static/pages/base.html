@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><!-- DYNAMIC: page title --> — Apprendre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+  <script type="module" src="../js/app.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header class="sticky" style="top: 0; z-index: 100;">
+    <nav class="navbar navbar-borderless" aria-label="Main navigation">
+      <!-- Desktop nav — hidden on mobile -->
+      <ul class="phone-hide">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="conversation.html">Conversations</a></li>
+        <li><a href="review.html">Review</a></li>
+        <li><a href="#">Carte</a></li>
+        <li class="margin-left-auto">
+          <button class="btn btn-ghost btn-icon btn-sm" id="theme-toggle" aria-label="Toggle dark mode">
+            <i data-feather="moon"></i>
+          </button>
+        </li>
+      </ul>
+      <!-- Mobile hamburger — hidden on desktop -->
+      <details class="tablet-hide desktop-hide">
+        <summary aria-label="Menu">&#9776; Menu</summary>
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="conversation.html">Conversations</a></li>
+          <li><a href="review.html">Review</a></li>
+          <li><a href="#">Carte</a></li>
+          <li>
+            <button class="btn btn-ghost btn-sm" id="theme-toggle-mobile" aria-label="Toggle dark mode">
+              <i data-feather="moon"></i> Dark mode
+            </button>
+          </li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- BLOCK: main content — each page overrides this -->
+  <main id="main">
+    <!-- Page content goes here -->
+  </main>
+
+  <footer class="padding-top padding-bottom">
+    <div class="units-container">
+      <p class="text-center text-tertiary">Apprendre — Learn French for your life in Louisiana</p>
+    </div>
+  </footer>
+</body>
+</html>

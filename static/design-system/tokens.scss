@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Apprendre Design Tokens
+   Overrides ply-css default light and dark themes with our brand.
+
+   Only tokens that CANNOT be expressed as ply overrides or ply palette vars
+   belong here. Chat bubbles, feedback, level badges, carte cells, spacing,
+   and transitions all use ply vars directly in components.scss.
+   ========================================================================== */
+
+/* ---------- Light mode ---------- */
+:root {
+  --ply-bg-body: #faf8f5;
+  --ply-bg-surface: #ffffff;
+  --ply-bg-surface-alt: #f5f2ed;
+  --ply-bg-muted: #edeae4;
+
+  --ply-color-body: #2d2a26;
+  --ply-color-headings: #1a1816;
+  --ply-color-secondary: #5c5650;
+  --ply-color-muted: #8a837b;
+  --ply-color-placeholder: #b0a99f;
+  --ply-color-text-inverse: #faf8f5;
+
+  --ply-border-color: #ddd8d0;
+  --ply-border-strong: #b0a99f;
+
+  --ply-color-accent: #4a6fa5;
+  --ply-color-focus: #4a6fa5;
+  --ply-color-link-hover: #365480;
+
+  --ply-btn-default-bg: #4a6fa5;
+  --ply-btn-default-color: #ffffff;
+  --ply-btn-default-bg-hover: #3d5e8c;
+  --ply-btn-default-bg-active: #365480;
+  --ply-btn-secondary-bg: #5c5650;
+  --ply-btn-secondary-color: #ffffff;
+  --ply-btn-secondary-bg-hover: #4a4540;
+  --ply-btn-secondary-bg-active: #3d3935;
+  --ply-btn-border-radius: 0.5rem;
+
+  --ply-color-input-bg: #ffffff;
+  --ply-color-input-border: #ddd8d0;
+
+  --ply-nav-bg: #faf8f5;
+  --ply-nav-color: #2d2a26;
+  --ply-nav-border: #ddd8d0;
+  --ply-nav-hover: #f5f2ed;
+
+  --ply-color-code-bg: #f5f2ed;
+  --ply-color-code-border: #ddd8d0;
+  --ply-color-table-border: #ddd8d0;
+  --ply-color-table-stripped: #f5f2ed;
+
+  --ply-layer-0: #faf8f5;
+  --ply-layer-1: #ffffff;
+  --ply-layer-2: #ffffff;
+  --ply-layer-3: #ffffff;
+  --ply-shadow-1: rgba(45, 42, 38, 0.06);
+  --ply-shadow-2: rgba(45, 42, 38, 0.08);
+  --ply-shadow-3: rgba(45, 42, 38, 0.12);
+
+  --ply-font-body: "Source Sans 3", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ply-font-heading: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+  --ply-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+}
+
+/* ---------- Dark mode ---------- */
+[data-theme="dark"] {
+  --ply-bg-body: #1a1816;
+  --ply-bg-surface: #242120;
+  --ply-bg-surface-alt: #2d2a26;
+  --ply-bg-muted: #363330;
+
+  --ply-color-body: #e8e4de;
+  --ply-color-headings: #f5f2ed;
+  --ply-color-secondary: #b0a99f;
+  --ply-color-muted: #8a837b;
+  --ply-color-placeholder: #6b645c;
+  --ply-color-text-inverse: #1a1816;
+
+  --ply-border-color: #3d3935;
+  --ply-border-strong: #5c5650;
+
+  --ply-color-accent: #7ba3d4;
+  --ply-color-focus: #7ba3d4;
+  --ply-color-link-hover: #a3c2e8;
+
+  --ply-btn-default-bg: #5a82b8;
+  --ply-btn-default-color: #ffffff;
+  --ply-btn-default-bg-hover: #6d93c5;
+  --ply-btn-default-bg-active: #7ba3d4;
+  --ply-btn-secondary-bg: #5c5650;
+  --ply-btn-secondary-color: #e8e4de;
+  --ply-btn-secondary-bg-hover: #6b645c;
+  --ply-btn-secondary-bg-active: #7a736b;
+  --ply-btn-border-radius: 0.5rem;
+
+  --ply-color-input-bg: #2d2a26;
+  --ply-color-input-border: #3d3935;
+
+  --ply-nav-bg: #1a1816;
+  --ply-nav-color: #e8e4de;
+  --ply-nav-border: #3d3935;
+  --ply-nav-hover: #2d2a26;
+
+  --ply-color-code-bg: #2d2a26;
+  --ply-color-code-border: #3d3935;
+  --ply-color-table-border: #3d3935;
+  --ply-color-table-stripped: #242120;
+
+  --ply-layer-0: #1a1816;
+  --ply-layer-1: #242120;
+  --ply-layer-2: #2d2a26;
+  --ply-layer-3: #363330;
+  --ply-shadow-1: rgba(0, 0, 0, 0.2);
+  --ply-shadow-2: rgba(0, 0, 0, 0.3);
+  --ply-shadow-3: rgba(0, 0, 0, 0.4);
+
+  --ply-font-body: "Source Sans 3", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ply-font-heading: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+  --ply-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+}

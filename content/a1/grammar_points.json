@@ -1,0 +1,198 @@
+[
+  {
+    "id": "a1-grammar-001",
+    "title": "Present tense: être (to be)",
+    "cefr_level": "A1",
+    "situations": ["social", "narrating", "parenting"],
+    "explanation_en": "Être (to be) is one of the two most important French verbs. You need it to say who you are, where you are, and to describe states. It's also used to form the past tense of some verbs (like 'tomber' — il est tombé).",
+    "explanation_fr": null,
+    "key_forms": {
+      "je": "suis",
+      "tu": "es",
+      "il/elle/on": "est",
+      "nous": "sommes",
+      "vous": "êtes",
+      "ils/elles": "sont"
+    },
+    "spoken_note": "In everyday speech, 'on est' is used far more than 'nous sommes'. 'On est en retard' (we're late) is what you'll actually hear.",
+    "related_chunks": ["a1-chunk-003", "a1-chunk-007", "a1-chunk-042"],
+    "common_errors": [
+      {
+        "error": "Je suis 30 ans",
+        "correction": "J'ai 30 ans",
+        "explanation": "French uses 'avoir' (to have) for age, not 'être' (to be). You 'have' years in French."
+      },
+      {
+        "error": "Je suis faim",
+        "correction": "J'ai faim",
+        "explanation": "French uses 'avoir' for hunger, thirst, and many physical states. 'I have hunger,' not 'I am hungry.'"
+      },
+      {
+        "error": "Il est un médecin",
+        "correction": "Il est médecin / C'est un médecin",
+        "explanation": "With professions, either drop the article with 'il est' or use 'c'est' with the article. Never 'il est un...'."
+      }
+    ]
+  },
+  {
+    "id": "a1-grammar-002",
+    "title": "Present tense: avoir (to have)",
+    "cefr_level": "A1",
+    "situations": ["social", "errands", "narrating"],
+    "explanation_en": "Avoir (to have) is the other essential French verb. Beyond possession, it's used for age ('j'ai 30 ans'), physical states ('j'ai faim', 'j'ai soif', 'j'ai froid'), and to form the past tense of most verbs ('j'ai mangé').",
+    "explanation_fr": null,
+    "key_forms": {
+      "j'": "ai",
+      "tu": "as",
+      "il/elle/on": "a",
+      "nous": "avons",
+      "vous": "avez",
+      "ils/elles": "ont"
+    },
+    "spoken_note": "'Tu as' is often contracted to 't'as' in speech. 'T'as vu ?' (did you see?) is completely normal spoken French.",
+    "related_chunks": ["a1-chunk-035", "a1-chunk-036", "a1-chunk-037", "a1-chunk-041"],
+    "common_errors": [
+      {
+        "error": "Je suis faim / Je suis soif",
+        "correction": "J'ai faim / J'ai soif",
+        "explanation": "English says 'I am hungry/thirsty' but French says 'I have hunger/thirst'. This is the #1 beginner mistake."
+      },
+      {
+        "error": "Il y est un chat",
+        "correction": "Il y a un chat",
+        "explanation": "'Il y a' (there is/are) always uses 'avoir', never 'être'. Learn it as one chunk."
+      }
+    ]
+  },
+  {
+    "id": "a1-grammar-003",
+    "title": "Present tense: regular -er verbs",
+    "cefr_level": "A1",
+    "situations": ["parenting", "social", "narrating"],
+    "explanation_en": "About 90% of French verbs end in -er, and they all follow the same pattern. Remove -er from the infinitive, then add the endings. The good news: in spoken French, je/tu/il/ils all sound the same — only the spelling changes.",
+    "explanation_fr": null,
+    "key_forms": {
+      "je": "-e (parle)",
+      "tu": "-es (parles)",
+      "il/elle/on": "-e (parle)",
+      "nous": "-ons (parlons)",
+      "vous": "-ez (parlez)",
+      "ils/elles": "-ent (parlent)"
+    },
+    "spoken_note": "The endings -e, -es, -e, and -ent are all SILENT. So 'je parle', 'tu parles', 'il parle', and 'ils parlent' all sound identical: [parl]. Only 'nous parlons' and 'vous parlez' sound different. This makes spoken French easier than it looks on paper.",
+    "related_chunks": ["a1-chunk-001", "a1-chunk-040", "a1-chunk-004"],
+    "common_errors": [
+      {
+        "error": "Je regarde le chat / pronouncing the -e",
+        "correction": "Je regarde le chat / silent -e",
+        "explanation": "The final -e in verb endings is always silent. Don't pronounce it."
+      },
+      {
+        "error": "Je cherche pour la pharmacie",
+        "correction": "Je cherche la pharmacie",
+        "explanation": "Unlike English 'look for', 'chercher' takes a direct object — no preposition needed."
+      }
+    ]
+  },
+  {
+    "id": "a1-grammar-004",
+    "title": "The imperative: giving instructions and reacting",
+    "cefr_level": "A1",
+    "situations": ["parenting", "reactive"],
+    "explanation_en": "The imperative is how you tell someone to do something — essential for parenting and everyday reactions. French has three imperative forms: tu (informal), nous (let's), and vous (formal/plural). At A1, the tu form is most useful. For -er verbs, drop the -s from the tu form. For irregular verbs, just learn the forms as chunks.",
+    "explanation_fr": null,
+    "key_forms": {
+      "regarde (tu)": "Look! (-er verbs: no -s)",
+      "arrête (tu)": "Stop!",
+      "attends (tu)": "Wait! (-re verbs: keep -s)",
+      "viens (tu)": "Come! (irregular)",
+      "regardons (nous)": "Let's look!",
+      "regardez (vous)": "Look! (formal/plural)"
+    },
+    "spoken_note": "The imperative is everywhere in spoken French, especially with children. 'Regarde !', 'Attends !', 'Viens !' — these are among the first things you need.",
+    "related_chunks": ["a1-chunk-001", "a1-chunk-006", "a1-chunk-009", "a1-chunk-022"],
+    "common_errors": [
+      {
+        "error": "Regardes ! (with -s)",
+        "correction": "Regarde ! (no -s)",
+        "explanation": "For -er verbs in the imperative tu form, drop the -s. 'Regarde !', not 'Regardes !'. This only applies to -er verbs."
+      },
+      {
+        "error": "Viens ici ! (pronouncing the -s)",
+        "correction": "Viens ici ! (silent -s: [vjɛ̃])",
+        "explanation": "The -s in 'viens' is silent, like most final consonants in French."
+      }
+    ]
+  },
+  {
+    "id": "a1-grammar-005",
+    "title": "Articles: le, la, les, un, une, des",
+    "cefr_level": "A1",
+    "situations": ["errands", "narrating", "parenting"],
+    "explanation_en": "Every French noun has a gender (masculine or feminine) and almost always needs an article. There's no shortcut — you must learn each noun with its article. That's why we always teach 'le chat' (the cat), never just 'chat'. Definite articles (le/la/les) = 'the'. Indefinite articles (un/une/des) = 'a/some'.",
+    "explanation_fr": null,
+    "key_forms": {
+      "le": "the (masculine singular) — le chat",
+      "la": "the (feminine singular) — la maison",
+      "l'": "the (before vowel/h) — l'eau, l'homme",
+      "les": "the (plural) — les enfants",
+      "un": "a (masculine) — un café",
+      "une": "a (feminine) — une baguette",
+      "des": "some (plural) — des pommes"
+    },
+    "spoken_note": "Gender is not optional — getting it wrong changes meaning or sounds unnatural. When you learn a new noun, always learn it with the article. There's no reliable rule for predicting gender; it's a memorization task.",
+    "related_chunks": ["a1-chunk-033", "a1-chunk-038", "a1-chunk-040", "a1-chunk-041"],
+    "common_errors": [
+      {
+        "error": "Je cherche pharmacie",
+        "correction": "Je cherche la pharmacie",
+        "explanation": "French nouns almost always need an article. Unlike English 'I'm looking for pharmacy' (wrong in both languages), French requires 'la pharmacie'."
+      },
+      {
+        "error": "J'ai un faim",
+        "correction": "J'ai faim",
+        "explanation": "Fixed expressions like 'avoir faim' and 'avoir soif' don't take an article. They're chunks — learn them whole."
+      },
+      {
+        "error": "Le eau",
+        "correction": "L'eau",
+        "explanation": "Before a vowel or silent h, 'le' and 'la' contract to 'l''. This is mandatory, not optional."
+      }
+    ]
+  },
+  {
+    "id": "a1-grammar-006",
+    "title": "Negation: spoken vs. written",
+    "cefr_level": "A1",
+    "situations": ["reactive", "social", "parenting"],
+    "explanation_en": "In written French, negation wraps around the verb: 'je ne sais pas' (I don't know). In spoken French, the 'ne' is almost always dropped: 'je sais pas'. Both are correct in their register. The tool teaches spoken first because that's what you'll hear and need to produce in conversation.",
+    "explanation_fr": null,
+    "key_forms": {
+      "spoken": "je sais pas / c'est pas vrai / y'a pas de...",
+      "written": "je ne sais pas / ce n'est pas vrai / il n'y a pas de...",
+      "ne...pas": "not (basic negation)",
+      "ne...plus": "no longer / not anymore",
+      "ne...jamais": "never",
+      "ne...rien": "nothing"
+    },
+    "spoken_note": "Dropping 'ne' is not sloppy French — it's how everyone speaks, including educated native speakers. Studies show 'ne' is dropped in over 95% of casual spoken French. Written French and formal speech keep 'ne'.",
+    "related_chunks": ["a1-chunk-024", "a1-chunk-026", "a1-chunk-043"],
+    "common_errors": [
+      {
+        "error": "Je ne sais pas (in casual conversation)",
+        "correction": "Je sais pas (spoken) / Je ne sais pas (written)",
+        "explanation": "Using 'ne' in casual speech sounds overly formal, like saying 'I do not know' instead of 'I don't know' in English. Match the register to the context."
+      },
+      {
+        "error": "Je pas sais",
+        "correction": "Je sais pas",
+        "explanation": "'Pas' goes after the verb, never before it. The structure is subject + (ne) + verb + pas."
+      },
+      {
+        "error": "C'est pas (meaning 'this is not') without context",
+        "correction": "C'est pas... (always needs something after 'pas')",
+        "explanation": "Negation always needs a complement: 'c'est pas vrai', 'c'est pas grave', 'c'est pas bon'. Don't leave 'pas' hanging."
+      }
+    ]
+  }
+]

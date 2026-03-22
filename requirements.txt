@@ -1,0 +1,8 @@
+fastapi
+httpx
+uvicorn
+python-multipart
+jinja2
+aiofiles
+fsrs
+spacy

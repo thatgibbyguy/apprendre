@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Apprendre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+  <script type="module" src="../js/app.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header class="sticky" style="top: 0; z-index: 100;">
+    <nav class="navbar navbar-borderless" aria-label="Main navigation">
+      <ul>
+        <li class="active"><a href="dashboard.html" aria-current="page">Dashboard</a></li>
+        <li><a href="play.html">Conversations</a></li>
+        <li><a href="review.html">Review</a></li>
+        <li><a href="#">Carte</a></li>
+        <li class="margin-left-auto">
+          <button class="btn btn-ghost btn-icon btn-sm" id="theme-toggle" aria-label="Toggle dark mode">
+            <i data-feather="moon"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="units-container">
+
+      <!-- Welcome bar — lightweight, level badges inline -->
+      <div class="welcome-bar padding-top">
+        <!-- DYNAMIC: learner name in greeting -->
+        <p class="welcome-bar__greeting text-sm">Bonjour — welcome back.</p>
+        <div class="welcome-bar__levels text-sm" aria-label="Your current levels">
+          <!-- DYNAMIC: levels per skill -->
+          <span class="text-tertiary">Speaking</span>
+          <span class="level-badge text-xs level-badge--a1">A1</span>
+          <span class="text-tertiary">Reading</span>
+          <span class="level-badge text-xs level-badge--a2">A2</span>
+          <span class="text-tertiary">Listening</span>
+          <span class="level-badge text-xs level-badge--a2">A2</span>
+        </div>
+      </div>
+
+      <!-- Primary Action — visually dominant, the main thing to do -->
+      <section class="padding-top-sm padding-bottom" aria-label="Continue learning">
+        <div class="units-row">
+          <div class="unit-100">
+            <!-- DYNAMIC: scenario name, exchange count, href -->
+            <a href="play.html" class="action-card no-link-style">
+              <div class="action-card__icon" aria-hidden="true">
+                <i data-feather="message-square"></i>
+              </div>
+              <div class="action-card__content">
+                <h1 class="action-card__title text-lg">Continue where you left off</h1>
+                <!-- DYNAMIC: scenario name + progress -->
+                <p class="action-card__subtitle text-sm">Playing with your child at the park — 3 exchanges in</p>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">
+                <i data-feather="chevron-right"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Review — secondary action, clearly below primary -->
+      <section class="padding-bottom-lg" aria-label="Review due">
+        <div class="units-row">
+          <div class="unit-60 tablet-unit-100">
+            <!-- DYNAMIC: review count, estimated time, href -->
+            <a href="review.html" class="action-card no-link-style">
+              <div class="action-card__icon" aria-hidden="true">
+                <i data-feather="activity"></i>
+              </div>
+              <div class="action-card__content">
+                <h2 class="action-card__title text-lg">Due for review</h2>
+                <!-- DYNAMIC: card count + time estimate -->
+                <p class="action-card__subtitle text-sm"><span class="review-count__number text-lg">12</span> cards ready — about 5 minutes</p>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">
+                <i data-feather="chevron-right"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Carte — glanceable progress, below the fold is fine -->
+      <section class="padding-bottom-lg" aria-label="Your carte — progress overview">
+        <div class="units-row">
+          <div class="unit-100">
+            <div class="display-flex justify-between items-baseline margin-bottom-sm">
+              <h2 class="h4">Your Carte</h2>
+              <a href="#" class="text-secondary">View all</a>
+            </div>
+
+            <div class="carte-legend text-xs margin-bottom-sm">
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--strong" aria-hidden="true"></span>
+                Strong
+              </div>
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--working" aria-hidden="true"></span>
+                Working on
+              </div>
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--upcoming" aria-hidden="true"></span>
+                Coming up
+              </div>
+              <div class="carte-legend__item">
+                <span class="carte-legend__swatch carte-legend__swatch--struggling" aria-hidden="true"></span>
+                Needs work
+              </div>
+            </div>
+
+            <!-- DYNAMIC: carte cells populated from API -->
+            <div class="carte-grid" role="list" aria-label="Progress by situation">
+              <div class="carte-cell text-sm carte-cell--strong" role="listitem" tabindex="0">
+                <strong>Greetings</strong><br>
+                <span class="carte-cell__detail text-xs">Bonjour, ca va...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--strong" role="listitem" tabindex="0">
+                <strong>Basic needs</strong><br>
+                <span class="carte-cell__detail text-xs">J'ai faim, soif...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--working" role="listitem" tabindex="0">
+                <strong>Playing</strong><br>
+                <span class="carte-cell__detail text-xs">Jouer, courir...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--working" role="listitem" tabindex="0">
+                <strong>Daily routine</strong><br>
+                <span class="carte-cell__detail text-xs">Se lever, manger...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--struggling" role="listitem" tabindex="0">
+                <strong>Past events</strong><br>
+                <span class="carte-cell__detail text-xs">Hier, la semaine...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>At the store</strong><br>
+                <span class="carte-cell__detail text-xs">Acheter, payer...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>Neighbors</strong><br>
+                <span class="carte-cell__detail text-xs">Parler, inviter...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>At the cafe</strong><br>
+                <span class="carte-cell__detail text-xs">Commander, payer...</span>
+              </div>
+              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
+                <strong>Opinions</strong><br>
+                <span class="carte-cell__detail text-xs">Je pense que...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Session Summary — collapsible, "check if curious" -->
+      <section class="padding-bottom-xl" aria-label="Last session summary">
+        <div class="units-row">
+          <div class="unit-60 tablet-unit-100">
+            <!-- DYNAMIC: session summary data from API -->
+            <details class="session-summary-details">
+              <summary class="text-sm">Last session summary</summary>
+              <div class="session-summary text-sm">
+                <div class="session-summary__stat">
+                  <span class="session-summary__stat-label">Scenario</span>
+                  <!-- DYNAMIC: scenario name -->
+                  <span class="session-summary__stat-value">Daily routine</span>
+                </div>
+                <div class="session-summary__stat">
+                  <span class="session-summary__stat-label">Duration</span>
+                  <!-- DYNAMIC: duration -->
+                  <span class="session-summary__stat-value">7 min</span>
+                </div>
+                <div class="session-summary__stat">
+                  <span class="session-summary__stat-label">Exchanges</span>
+                  <!-- DYNAMIC: exchange count -->
+                  <span class="session-summary__stat-value">8</span>
+                </div>
+                <div class="session-summary__stat">
+                  <span class="session-summary__stat-label">New cards created</span>
+                  <!-- DYNAMIC: card count -->
+                  <span class="session-summary__stat-value">3</span>
+                </div>
+                <h4 class="h6 text-secondary margin-top margin-bottom-xs">To work on</h4>
+                <!-- DYNAMIC: feedback items from API -->
+                <ul class="session-summary__feedback-list">
+                  <li class="session-summary__feedback-item">Direct object pronouns (le, la, les) before the verb</li>
+                  <li class="session-summary__feedback-item">Reflexive verbs in daily routine context</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="padding-top padding-bottom">
+    <div class="units-container">
+      <p class="text-center text-tertiary">Apprendre — Learn French for your life in Louisiana</p>
+    </div>
+  </footer>
+</body>
+</html>

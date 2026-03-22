@@ -1,0 +1,31 @@
+{
+  "name": "apprendre",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -n api,vite -c blue,green \"python3.11 -m uvicorn server.main:app --port 8000 --reload --reload-dir server\" \"vite\"",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thatgibbyguy/apprendre.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thatgibbyguy/apprendre/issues"
+  },
+  "homepage": "https://github.com/thatgibbyguy/apprendre#readme",
+  "description": "",
+  "dependencies": {
+    "ply-css": "^1.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "sass": "^1.98.0",
+    "vite": "^8.0.1",
+    "vite-plugin-live-reload": "^3.1.0"
+  }
+}

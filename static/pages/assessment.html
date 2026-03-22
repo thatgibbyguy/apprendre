@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome — Apprendre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+  <script type="module" src="../js/app.js"></script>
+  <style>
+    .assessment-layout {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    .assessment-layout__body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .assessment-welcome {
+      text-align: center;
+      padding: var(--ply-space-xxl) var(--ply-space-lg);
+      max-width: 32rem;
+      margin: 0 auto;
+    }
+    .assessment-welcome h1 {
+      margin-bottom: var(--ply-space-sm);
+    }
+    .assessment-welcome p {
+      color: var(--ply-color-secondary);
+      line-height: 1.6;
+    }
+    .level-result {
+      background: var(--ply-bg-surface);
+      border: 1px solid var(--ply-border-color);
+      border-radius: 0.75rem;
+      padding: var(--ply-space-xl);
+      max-width: 28rem;
+      margin: var(--ply-space-xl) auto;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--ply-shadow-2);
+    }
+    .level-result__heading {
+      font-family: var(--ply-font-heading);
+      color: var(--ply-color-headings);
+      margin: 0 0 var(--ply-space-lg) 0;
+    }
+    .level-result__skills {
+      display: flex;
+      justify-content: center;
+      gap: var(--ply-space-lg);
+      margin-bottom: var(--ply-space-lg);
+    }
+    .level-result__skill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--ply-space-xs);
+    }
+    .level-result__skill-label {
+      color: var(--ply-color-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .level-result__encouragement {
+      color: var(--ply-color-secondary);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: var(--ply-space-lg);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <div class="assessment-layout">
+    <!-- Minimal header for assessment flow -->
+    <header>
+      <nav class="navbar navbar-borderless" aria-label="Main navigation">
+        <ul>
+          <li><strong>Apprendre</strong></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main" class="assessment-layout__body">
+
+      <!-- Welcome message — shown initially -->
+      <div class="assessment-welcome" id="assessment-welcome">
+        <h1 class="text-2xl">Bonjour.</h1>
+        <p class="text-lg">Let's find out where you are.</p>
+        <p class="margin-top text-tertiary">We'll have a short conversation — just three prompts. Answer in French as best you can. There are no wrong answers.</p>
+        <button class="btn btn-primary margin-top-lg" id="start-assessment">Begin</button>
+      </div>
+
+      <!-- Chat area for assessment conversation — hidden initially -->
+      <div class="chat-thread" id="assessment-thread" role="log" aria-label="Assessment conversation" aria-live="polite" hidden>
+        <!-- DYNAMIC: assessment prompts and responses populated by JS -->
+        <!--
+          Assessment prompts (from User Journey):
+          1. "Tell me about yourself in French."
+          2. "What did you do yesterday?"
+          3. "What do you think about [something simple]?"
+        -->
+      </div>
+
+      <!-- Level result card — hidden until assessment complete -->
+      <div id="level-result" hidden>
+        <div class="level-result">
+          <h2 class="level-result__heading text-lg">Your starting point</h2>
+          <div class="level-result__skills">
+            <!-- DYNAMIC: assessed levels -->
+            <div class="level-result__skill">
+              <span class="level-result__skill-label text-xs">Speaking</span>
+              <span class="level-badge text-xs level-badge--a1">A1</span>
+            </div>
+            <div class="level-result__skill">
+              <span class="level-result__skill-label text-xs">Reading</span>
+              <span class="level-badge text-xs level-badge--a2">A2</span>
+            </div>
+            <div class="level-result__skill">
+              <span class="level-result__skill-label text-xs">Listening</span>
+              <span class="level-badge text-xs level-badge--a2">A2</span>
+            </div>
+          </div>
+          <!-- DYNAMIC: encouragement text -->
+          <p class="level-result__encouragement text-sm">You understand more than you can say yet. That's normal — and exactly what we're going to work on.</p>
+          <a href="dashboard.html" class="btn btn-primary">Go to your dashboard</a>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Chat input for assessment — hidden initially -->
+    <footer id="assessment-input-area" hidden>
+      <div class="chat-input-area">
+        <label for="assessment-input" class="sr-only">Type your response in French</label>
+        <input type="text" id="assessment-input" placeholder="Ecrivez en francais..." autocomplete="off">
+        <button class="btn btn-primary btn-icon" id="assessment-send" aria-label="Send response">
+          <i data-feather="send"></i>
+        </button>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

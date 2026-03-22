@@ -1,0 +1,11 @@
+// Apprendre — main stylesheet
+// Imports ply-css source, then design tokens and component overrides.
+
+// 1. ply-css full framework (via node_modules load path)
+@use "ply-css/src/scss/_ply";
+
+// 2. Design tokens (CSS custom property overrides for light + dark mode)
+@use "../design-system/tokens";
+
+// 3. Custom component styles
+@use "../design-system/components";

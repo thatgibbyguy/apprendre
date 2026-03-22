@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review — Apprendre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+  <script type="module" src="../js/app.js"></script>
+  <style>
+    .review-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--ply-space-sm);
+      padding: var(--ply-space-sm) var(--ply-space-md);
+      color: var(--ply-color-secondary);
+    }
+    .review-progress__bar {
+      flex: 1;
+      max-width: 12rem;
+      height: 0.375rem;
+      background: var(--ply-bg-muted);
+      border-radius: 0.1875rem;
+      overflow: hidden;
+    }
+    .review-progress__fill {
+      height: 100%;
+      background: var(--ply-color-accent);
+      border-radius: 0.1875rem;
+      transition: width var(150ms ease);
+    }
+    .review-answer-area {
+      max-width: 32rem;
+      margin: 0 auto;
+      padding: 0 var(--ply-space-md);
+    }
+    .review-complete {
+      text-align: center;
+      padding: var(--ply-space-xxl) var(--ply-space-lg);
+      max-width: 28rem;
+      margin: 0 auto;
+    }
+    .review-complete h2 {
+      margin-bottom: var(--ply-space-sm);
+    }
+    .review-complete p {
+      color: var(--ply-color-secondary);
+      margin-bottom: var(--ply-space-lg);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header class="sticky" style="top: 0; z-index: 100;">
+    <nav class="navbar navbar-borderless" aria-label="Main navigation">
+      <ul class="phone-hide">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="conversation.html">Conversations</a></li>
+        <li class="active"><a href="review.html" aria-current="page">Review</a></li>
+        <li><a href="#">Carte</a></li>
+        <li class="margin-left-auto">
+          <button class="btn btn-ghost btn-icon btn-sm" id="theme-toggle" aria-label="Toggle dark mode">
+            <i data-feather="moon"></i>
+          </button>
+        </li>
+      </ul>
+      <details class="tablet-hide desktop-hide">
+        <summary aria-label="Menu">&#9776; Menu</summary>
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="conversation.html">Conversations</a></li>
+          <li class="active"><a href="review.html" aria-current="page">Review</a></li>
+          <li><a href="#">Carte</a></li>
+          <li>
+            <button class="btn btn-ghost btn-sm" id="theme-toggle-mobile" aria-label="Toggle dark mode">
+              <i data-feather="moon"></i> Dark mode
+            </button>
+          </li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="units-container">
+
+      <!-- Session Progress -->
+      <div class="review-progress text-sm" role="status" aria-label="Review progress">
+        <!-- DYNAMIC: current / total count -->
+        <span id="review-progress-text">3 of 12</span>
+        <div class="review-progress__bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+          <!-- DYNAMIC: width based on progress -->
+          <div class="review-progress__fill" id="review-progress-fill" style="width: 25%;"></div>
+        </div>
+      </div>
+
+      <!-- Review Card -->
+      <section class="padding-top padding-bottom-lg" aria-label="Review card">
+        <!-- DYNAMIC: card content from SRS API -->
+        <div class="review-card" id="review-card">
+          <!-- DYNAMIC: prompt text -->
+          <div class="review-card__prompt text-lg" id="review-prompt">
+            Comment dit-on "I watch her play" ?
+          </div>
+          <!-- DYNAMIC: context sentence -->
+          <div class="review-card__context text-sm" id="review-context">
+            From: Playing with your child at the park
+          </div>
+
+          <!-- Answer area — shown before reveal -->
+          <div class="review-answer-area" id="review-answer-area">
+            <div class="form">
+              <label for="review-answer" class="sr-only">Your answer</label>
+              <input type="text" id="review-answer" placeholder="Type your answer..." autocomplete="off">
+            </div>
+            <div class="text-center margin-top">
+              <button class="btn btn-primary" id="reveal-btn">Show answer</button>
+            </div>
+          </div>
+
+          <!-- Correct answer — hidden until revealed -->
+          <div id="review-revealed" hidden>
+            <!-- DYNAMIC: correct answer -->
+            <div class="review-card__answer text-lg" id="review-correct-answer">
+              Je la regarde jouer.
+            </div>
+
+            <!-- Rating buttons -->
+            <div class="review-card__actions" role="group" aria-label="Rate your recall">
+              <button class="btn btn-red btn-sm" data-rating="1">Again</button>
+              <button class="btn btn-yellow btn-sm" data-rating="2">Hard</button>
+              <button class="btn btn-green btn-sm" data-rating="3">Good</button>
+              <button class="btn btn-blue btn-sm" data-rating="4">Easy</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Session complete — hidden until all cards reviewed -->
+      <section id="review-complete" class="padding-top-xl" hidden>
+        <div class="review-complete">
+          <h2>Session complete</h2>
+          <!-- DYNAMIC: summary stats -->
+          <p>You reviewed 12 cards in about 5 minutes.</p>
+          <a href="dashboard.html" class="btn btn-primary">Back to dashboard</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="padding-top padding-bottom">
+    <div class="units-container">
+      <p class="text-center text-tertiary">Apprendre — Learn French for your life in Louisiana</p>
+    </div>
+  </footer>
+</body>
+</html>
