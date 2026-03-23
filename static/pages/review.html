@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
   <script type="module" src="../js/app.js"></script>
+  <script src="../js/review.js" defer></script>
   <style>
     .review-progress {
       display: flex;
@@ -30,7 +31,7 @@
       height: 100%;
       background: var(--ply-color-accent);
       border-radius: 0.1875rem;
-      transition: width var(150ms ease);
+      transition: width 150ms ease;
     }
     .review-answer-area {
       max-width: 32rem;
@@ -49,6 +50,24 @@
     .review-complete p {
       color: var(--ply-color-secondary);
       margin-bottom: var(--ply-space-lg);
+    }
+    .review-empty {
+      text-align: center;
+      padding: var(--ply-space-xxl) var(--ply-space-lg);
+      max-width: 28rem;
+      margin: 0 auto;
+    }
+    .review-empty h2 {
+      margin-bottom: var(--ply-space-sm);
+    }
+    .review-empty p {
+      color: var(--ply-color-secondary);
+      margin-bottom: var(--ply-space-lg);
+    }
+    .review-loading {
+      text-align: center;
+      padding: var(--ply-space-xxl) var(--ply-space-lg);
+      color: var(--ply-color-secondary);
     }
   </style>
 </head>
@@ -89,50 +108,52 @@
   <main id="main">
     <div class="units-container">
 
-      <!-- Session Progress -->
-      <div class="review-progress text-sm" role="status" aria-label="Review progress">
-        <!-- DYNAMIC: current / total count -->
-        <span id="review-progress-text">3 of 12</span>
-        <div class="review-progress__bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-          <!-- DYNAMIC: width based on progress -->
-          <div class="review-progress__fill" id="review-progress-fill" style="width: 25%;"></div>
+      <!-- Error banner — hidden until an API error occurs -->
+      <div id="review-error" class="alert alert-error margin-top" role="alert" hidden></div>
+
+      <!-- Loading state — visible while fetching cards -->
+      <div id="review-loading" class="review-loading" role="status" aria-live="polite">
+        Loading your review cards…
+      </div>
+
+      <!-- Session Progress — hidden until cards are loaded -->
+      <div class="review-progress text-sm" role="status" aria-label="Review progress" id="review-progress-wrapper" hidden>
+        <span id="review-progress-text">0 of 0</span>
+        <div class="review-progress__bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="review-progress__fill" id="review-progress-fill" style="width: 0%;"></div>
         </div>
       </div>
 
-      <!-- Review Card -->
-      <section class="padding-top padding-bottom-lg" aria-label="Review card">
-        <!-- DYNAMIC: card content from SRS API -->
+      <!-- Review Card section — hidden until cards are loaded -->
+      <section class="padding-top padding-bottom-lg" aria-label="Review card" hidden>
         <div class="review-card" id="review-card">
-          <!-- DYNAMIC: prompt text -->
-          <div class="review-card__prompt text-lg" id="review-prompt">
-            Comment dit-on "I watch her play" ?
-          </div>
-          <!-- DYNAMIC: context sentence -->
-          <div class="review-card__context text-sm" id="review-context">
-            From: Playing with your child at the park
-          </div>
+          <!-- Prompt: English phrase the learner must recall in French -->
+          <div class="review-card__prompt text-lg" id="review-prompt"></div>
+          <!-- Context sentence from the content item -->
+          <div class="review-card__context text-sm" id="review-context"></div>
 
           <!-- Answer area — shown before reveal -->
           <div class="review-answer-area" id="review-answer-area">
             <div class="form">
-              <label for="review-answer" class="sr-only">Your answer</label>
-              <input type="text" id="review-answer" placeholder="Type your answer..." autocomplete="off">
+              <label for="review-answer" class="sr-only">Your answer (optional)</label>
+              <input type="text" id="review-answer" placeholder="Try to recall in French… (optional)" autocomplete="off">
             </div>
             <div class="text-center margin-top">
-              <button class="btn btn-primary" id="reveal-btn">Show answer</button>
+              <button class="btn btn-primary btn-icon" id="reveal-btn">
+                <i data-feather="eye"></i> Show answer
+              </button>
             </div>
           </div>
 
           <!-- Correct answer — hidden until revealed -->
           <div id="review-revealed" hidden>
-            <!-- DYNAMIC: correct answer -->
-            <div class="review-card__answer text-lg" id="review-correct-answer">
-              Je la regarde jouer.
-            </div>
+            <div class="review-card__answer text-lg" id="review-correct-answer"></div>
 
             <!-- Rating buttons -->
             <div class="review-card__actions" role="group" aria-label="Rate your recall">
-              <button class="btn btn-red btn-sm" data-rating="1">Again</button>
+              <button class="btn btn-red btn-sm btn-icon" data-rating="1">
+                <i data-feather="rotate-ccw"></i> Again
+              </button>
               <button class="btn btn-yellow btn-sm" data-rating="2">Hard</button>
               <button class="btn btn-green btn-sm" data-rating="3">Good</button>
               <button class="btn btn-blue btn-sm" data-rating="4">Easy</button>
@@ -141,12 +162,20 @@
         </div>
       </section>
 
-      <!-- Session complete — hidden until all cards reviewed -->
+      <!-- Empty state — shown when no reviews are due today -->
+      <section id="review-empty" class="padding-top-xl" hidden>
+        <div class="review-empty">
+          <h2>All caught up</h2>
+          <p>No reviews due — check back later.</p>
+          <a href="dashboard.html" class="btn btn-primary">Back to dashboard</a>
+        </div>
+      </section>
+
+      <!-- Session complete — shown when all due cards are rated -->
       <section id="review-complete" class="padding-top-xl" hidden>
         <div class="review-complete">
           <h2>Session complete</h2>
-          <!-- DYNAMIC: summary stats -->
-          <p>You reviewed 12 cards in about 5 minutes.</p>
+          <p id="review-complete-summary">You reviewed your cards.</p>
           <a href="dashboard.html" class="btn btn-primary">Back to dashboard</a>
         </div>
       </section>
@@ -159,5 +188,12 @@
       <p class="text-center text-tertiary">Apprendre — Learn French for your life in Louisiana</p>
     </div>
   </footer>
+
+  <script>
+    // Initialise Feather icons after the deferred scripts load.
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof feather !== 'undefined') feather.replace();
+    });
+  </script>
 </body>
 </html>
