@@ -6,12 +6,22 @@
     "situation": "parenting",
     "cefr_level": "A1",
     "description": "Your child's imaginary friend wants to play. Talk to them in French — give instructions, react to what they do.",
+    "description_fr": "L'ami imaginaire de ton enfant veut jouer. Parle-lui en français.",
     "ai_role": "Your child's imaginary friend",
+    "ai_role_fr": "L'ami imaginaire de ton enfant",
     "target_chunks": ["a1-chunk-001", "a1-chunk-002", "a1-chunk-003", "a1-chunk-006", "a1-chunk-007", "a1-chunk-008", "a1-chunk-010"],
     "target_structures": ["imperative", "present tense -er verbs", "c'est + adjective"],
     "topic_suggestions": ["On joue à quoi ?", "Fais attention !", "Regarde ça !"],
     "starter_prompt": "On joue ? On fait quoi ?",
+    "example_exchanges": [
+      {"role": "assistant", "content": "On joue ? On fait quoi ?"},
+      {"role": "user", "content": "on joue au ballon !"},
+      {"role": "assistant", "content": "Oh oui ! J'adore le ballon. Allez, lance !"},
+      {"role": "user", "content": "attrape !"},
+      {"role": "assistant", "content": "J'ai attrapé ! C'est à moi, regarde !"}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "tu",
     "feedback_focus": ["gender agreement", "basic verb forms"]
   },
   {
@@ -21,12 +31,22 @@
     "situation": "social",
     "cefr_level": "A1",
     "description": "You run into your neighbor outside your building. Exchange greetings, chat a bit, and say goodbye.",
+    "description_fr": "Tu croises ton voisin devant l'immeuble. Vous discutez un peu.",
     "ai_role": "Your friendly neighbor",
+    "ai_role_fr": "Ton voisin sympa",
     "target_chunks": ["a1-chunk-011", "a1-chunk-012", "a1-chunk-016", "a1-chunk-017", "a1-chunk-018", "a1-chunk-019"],
     "target_structures": ["ça va? / comment ça va?", "basic greeting formulas"],
     "topic_suggestions": ["Ça va ?", "Il fait beau, non ?", "À bientôt !"],
     "starter_prompt": "Eh, salut ! Quoi de neuf ?",
+    "example_exchanges": [
+      {"role": "assistant", "content": "Eh, salut ! Quoi de neuf ?"},
+      {"role": "user", "content": "salut ! bah, pas grand-chose, et toi ?"},
+      {"role": "assistant", "content": "Tranquille. J'ai fait les courses, là j'suis crevé."},
+      {"role": "user", "content": "ah ouais, moi aussi j'dois y aller bientôt"},
+      {"role": "assistant", "content": "Bon courage ! Y'a du monde le samedi."}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "tu",
     "feedback_focus": ["tu vs. vous", "greeting formulas"]
   },
   {
@@ -36,12 +56,22 @@
     "situation": "errands",
     "cefr_level": "A1",
     "description": "You're at a French café. Order a drink, ask how much it costs, and thank the server.",
+    "description_fr": "Tu es dans un café. Commande une boisson, demande le prix.",
     "ai_role": "A café server",
+    "ai_role_fr": "Le serveur du café",
     "target_chunks": ["a1-chunk-031", "a1-chunk-032", "a1-chunk-034", "a1-chunk-020", "a1-chunk-033"],
     "target_structures": ["je voudrais + noun", "combien + verb"],
     "topic_suggestions": ["Je voudrais un café", "C'est combien ?", "Merci beaucoup !"],
     "starter_prompt": "Bonjour ! Vous désirez ?",
+    "example_exchanges": [
+      {"role": "assistant", "content": "Bonjour ! Vous désirez ?"},
+      {"role": "user", "content": "je voudrais un café"},
+      {"role": "assistant", "content": "Un café, très bien. Vous voulez autre chose ?"},
+      {"role": "user", "content": "non merci. c'est combien ?"},
+      {"role": "assistant", "content": "Un euro cinquante."}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "vous",
     "feedback_focus": ["politeness formulas", "articles with nouns"]
   },
   {
@@ -51,12 +81,22 @@
     "situation": "reactive",
     "cefr_level": "A1",
     "description": "A friend tells you surprising news. React naturally using French reactive language.",
+    "description_fr": "Ton ami te raconte une nouvelle surprenante. Réagis naturellement.",
     "ai_role": "A friend sharing surprising news",
+    "ai_role_fr": "Un ami qui raconte un truc dingue",
     "target_chunks": ["a1-chunk-013", "a1-chunk-014", "a1-chunk-021", "a1-chunk-024", "a1-chunk-027", "a1-chunk-029"],
     "target_structures": ["c'est + adjective", "reactive interjections"],
     "topic_suggestions": ["C'est pas vrai !", "Ah bon ? Raconte !", "C'est fou !"],
     "starter_prompt": "Tu sais quoi ? Mon voisin a un crocodile !",
+    "example_exchanges": [
+      {"role": "assistant", "content": "Tu sais quoi ? Mon voisin a un crocodile !"},
+      {"role": "user", "content": "c'est pas vrai !"},
+      {"role": "assistant", "content": "Si, j'te jure ! Il est énorme en plus."},
+      {"role": "user", "content": "c'est fou ! il est dangereux ?"},
+      {"role": "assistant", "content": "Bah, j'sais pas. Il a l'air gentil."}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "tu",
     "feedback_focus": ["natural reactive language", "intonation awareness"]
   },
   {
@@ -66,12 +106,22 @@
     "situation": "parenting",
     "cefr_level": "A1",
     "description": "You're watching your child play and another parent next to you starts chatting.",
+    "description_fr": "Tu regardes ton enfant jouer et un autre parent commence à discuter.",
     "ai_role": "Another parent sitting next to you on the bench",
+    "ai_role_fr": "Un autre parent au parc",
     "target_chunks": ["a1-chunk-001", "a1-chunk-004", "a1-chunk-041", "a1-chunk-042", "a1-chunk-003"],
     "target_structures": ["present tense narration", "il y a", "c'est"],
     "topic_suggestions": ["Il fait beau !", "Il a quel âge ?", "C'est ton fils ?"],
     "starter_prompt": "Il fait beau, non ?",
+    "example_exchanges": [
+      {"role": "assistant", "content": "Il fait beau, non ?"},
+      {"role": "user", "content": "oui, c'est super"},
+      {"role": "assistant", "content": "C'est ton fils là-bas ? Il a quel âge ?"},
+      {"role": "user", "content": "oui, il a trois ans"},
+      {"role": "assistant", "content": "Ah, comme ma fille ! Elle a trois ans aussi."}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "tu",
     "feedback_focus": ["present tense forms", "gender of nouns"]
   },
   {
@@ -81,12 +131,22 @@
     "situation": "social",
     "cefr_level": "A1",
     "description": "You meet someone new at a get-together. Introduce yourself and make basic small talk.",
+    "description_fr": "Tu rencontres quelqu'un à une soirée. Présente-toi, fais la conversation.",
     "ai_role": "Someone you just met at a party",
+    "ai_role_fr": "Quelqu'un que tu viens de rencontrer",
     "target_chunks": ["a1-chunk-044", "a1-chunk-045", "a1-chunk-011", "a1-chunk-020"],
     "target_structures": ["je m'appelle", "être + nationality/profession", "basic questions"],
     "topic_suggestions": ["Je m'appelle...", "Tu fais quoi ?", "Je suis de..."],
     "starter_prompt": "Salut ! Moi c'est Camille. Et toi ?",
+    "example_exchanges": [
+      {"role": "assistant", "content": "Salut ! Moi c'est Camille. Et toi ?"},
+      {"role": "user", "content": "moi c'est Alex. enchanté !"},
+      {"role": "assistant", "content": "Enchanté ! Tu connais du monde ici ?"},
+      {"role": "user", "content": "non, pas trop. et toi ?"},
+      {"role": "assistant", "content": "Moi oui, un peu. Tu fais quoi dans la vie ?"}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "tu",
     "feedback_focus": ["être vs. avoir", "gender agreement with nationality/profession"]
   },
   {
@@ -96,12 +156,22 @@
     "situation": "parenting",
     "cefr_level": "A1",
     "description": "It's bedtime. Tell your child what to do — brush teeth, put on pajamas, get into bed.",
+    "description_fr": "C'est l'heure de dormir. Dis à ton enfant quoi faire.",
     "ai_role": "Your child who doesn't want to go to bed",
+    "ai_role_fr": "Ton enfant qui veut pas dormir",
     "target_chunks": ["a1-chunk-006", "a1-chunk-007", "a1-chunk-009", "a1-chunk-010", "a1-chunk-008"],
     "target_structures": ["imperative", "on + verb", "c'est l'heure de..."],
     "topic_suggestions": ["C'est l'heure de dormir !", "Brosse tes dents !", "Encore une histoire ?"],
     "starter_prompt": "Non ! Je veux pas dormir ! Je veux jouer !",
+    "example_exchanges": [
+      {"role": "assistant", "content": "Non ! Je veux pas dormir ! Je veux jouer !"},
+      {"role": "user", "content": "c'est l'heure de dormir"},
+      {"role": "assistant", "content": "Mais j'suis pas fatigué ! Encore un peu ?"},
+      {"role": "user", "content": "non, brosse tes dents"},
+      {"role": "assistant", "content": "Oh non... D'accord. Mais après, une histoire ?"}
+    ],
     "expected_output_type": "isolated phrases and simple sentences",
+    "register": "tu",
     "feedback_focus": ["imperative forms", "spoken negation"]
   }
 ]

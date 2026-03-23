@@ -132,6 +132,70 @@
     bubble.appendChild(popover);
   }
 
+  /**
+   * Attach a positive "correct" indicator to a learner message.
+   * Shows a green checkmark dot and a brief flash animation on the bubble.
+   * @param {HTMLElement} messageEl — the .chat-message--learner wrapper
+   */
+  function attachCorrect(messageEl) {
+    var bubble = messageEl.querySelector('.chat-bubble');
+    if (!bubble) return;
+
+    // Green checkmark indicator
+    var indicator = document.createElement('span');
+    indicator.className = 'feedback-indicator feedback-indicator--correct';
+    indicator.setAttribute('aria-label', 'Good response');
+
+    bubble.style.position = 'relative';
+    bubble.appendChild(indicator);
+
+    // Flash animation on the bubble
+    bubble.classList.add('chat-bubble--correct-flash');
+  }
+
+  /**
+   * Highlight above-level vocabulary in an AI message bubble.
+   * Wraps matching words in clickable <mark> tags with tooltips
+   * showing the base form (lemma).
+   * @param {HTMLElement} messageEl — the .chat-message--ai wrapper
+   * @param {string[]} vocabHelp — items like "dérouler (dérouler)"
+   */
+  function highlightVocab(messageEl, vocabHelp) {
+    var bubble = messageEl.querySelector('.chat-bubble');
+    if (!bubble) return;
+
+    // Build a map of surface form → lemma from "surface (lemma)" entries
+    var wordMap = {};
+    vocabHelp.forEach(function (entry) {
+      var parts = entry.match(/^(.+?) \((.+?)\)$/);
+      if (parts) {
+        wordMap[parts[1].toLowerCase()] = parts[2];
+      }
+    });
+
+    var words = Object.keys(wordMap);
+    if (!words.length) return;
+
+    // Escape for regex and build a pattern
+    var escaped = words.map(function (w) {
+      return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    });
+    var pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+
+    bubble.innerHTML = bubble.textContent.replace(pattern, function (match) {
+      var lemma = wordMap[match.toLowerCase()] || match;
+      return '<mark class="vocab-highlight" data-lemma="' + lemma + '">' + match + '</mark>';
+    });
+
+    // Attach hover tooltips to each highlight
+    bubble.querySelectorAll('.vocab-highlight').forEach(function (mark) {
+      var tooltip = document.createElement('span');
+      tooltip.className = 'vocab-tooltip';
+      tooltip.textContent = mark.dataset.lemma;
+      mark.appendChild(tooltip);
+    });
+  }
+
   /** Close all open feedback popovers */
   function closeAllPopovers() {
     document.querySelectorAll('.feedback-popover--visible').forEach(function (el) {
@@ -423,13 +487,19 @@
       const existing = document.getElementById('typing-indicator');
       if (existing) existing.remove();
 
-      // Append AI response
+      // Append AI response — highlight any above-level vocabulary
       const aiName = window.__aiRole || 'Partner';
-      appendToChat(buildMessage('ai', data.message, aiName));
+      const aiMsg = buildMessage('ai', data.message, aiName);
+      if (data.vocab_help && data.vocab_help.length > 0) {
+        highlightVocab(aiMsg, data.vocab_help);
+      }
+      appendToChat(aiMsg);
 
-      // Attach feedback indicator to the learner message if error found
+      // Attach feedback indicator — always show, positive or corrective
       if (data.feedback && data.feedback.error_found) {
         attachFeedback(learnerMsg, data.feedback);
+      } else {
+        attachCorrect(learnerMsg);
       }
     } catch (err) {
       const existing = document.getElementById('typing-indicator');
@@ -463,8 +533,13 @@
     const endBtn = document.getElementById('end-btn');
     if (endBtn) endBtn.addEventListener('click', handleEndConversation);
 
-    // Close popovers when clicking elsewhere
-    document.addEventListener('click', closeAllPopovers);
+    // Close popovers and vocab tooltips when clicking elsewhere
+    document.addEventListener('click', function () {
+      closeAllPopovers();
+      document.querySelectorAll('.vocab-tooltip--visible').forEach(function (el) {
+        el.classList.remove('vocab-tooltip--visible');
+      });
+    });
 
     // Replace feather icons
     if (typeof feather !== 'undefined') {

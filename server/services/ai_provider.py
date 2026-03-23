@@ -94,6 +94,7 @@ class OllamaProvider:
         *,
         temperature: float = 0.7,
         json_mode: bool = False,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate a response continuing a multi-turn conversation.
 
@@ -102,6 +103,7 @@ class OllamaProvider:
                 Roles must be "system", "user", or "assistant".
             temperature: Sampling temperature (0.0–1.0).
             json_mode: When True, instructs Ollama to return valid JSON.
+            max_tokens: Maximum tokens to generate (Ollama num_predict).
 
         Returns:
             The assistant's response text.
@@ -131,6 +133,8 @@ class OllamaProvider:
             body["system"] = "\n\n".join(system_parts)
         if json_mode:
             body["format"] = "json"
+        if max_tokens is not None:
+            body["options"] = {"num_predict": max_tokens}
 
         async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
             response = await client.post(f"{self.base_url}/api/chat", json=body)

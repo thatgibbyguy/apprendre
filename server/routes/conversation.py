@@ -27,7 +27,7 @@ from server.models.database import (
     get_session,
     end_session,
 )
-from server.prompts import CONVERSATION, FEEDBACK_CLASSIFIER, SESSION_SUMMARY
+from server.prompts import CONVERSATION, FEEDBACK_CLASSIFIER, LEVEL_INSTRUCTIONS, SESSION_SUMMARY
 from server.services.ai_provider import OllamaProvider
 from server.services.feedback import FeedbackSelector
 
@@ -35,7 +35,12 @@ router = APIRouter()
 
 # ---------------------------------------------------------------------------
 # In-memory session cache
-# Maps session_id → {"provider": OllamaProvider, "system_prompt": str}
+# Maps session_id → {
+#     "provider": OllamaProvider,
+#     "prompt_params": dict,       # template vars for CONVERSATION (no feedback_type)
+#     "register": str,             # expected register ("tu" or "vous")
+#     "example_exchanges": list,   # few-shot message dicts pre-seeded before history
+# }
 # Avoids reconstructing the provider on every message.
 # ---------------------------------------------------------------------------
 
@@ -72,77 +77,23 @@ def _make_provider() -> OllamaProvider:
 def _build_messages_from_transcript(
     transcript: list[dict],
     system_prompt: str,
+    example_exchanges: list[dict] | None = None,
 ) -> list[dict]:
     """Convert stored transcript entries to the messages list for generate_with_history.
 
-    The system prompt is prepended as a system message. Any existing system
-    entries in the transcript are skipped to avoid duplication.
+    The system prompt is prepended as a system message. Few-shot example_exchanges
+    are inserted after the system message and before the real conversation history,
+    demonstrating the desired style and register. Any system entries in the
+    transcript are skipped to avoid duplication.
     """
     messages: list[dict] = [{"role": "system", "content": system_prompt}]
+    if example_exchanges:
+        messages.extend(example_exchanges)
     for entry in transcript:
         if entry.get("role") == "system":
             continue
         messages.append({"role": entry["role"], "content": entry["content"]})
     return messages
-
-
-import re
-
-# Patterns that indicate the model fell back to assistant/helper mode.
-_ASSISTANT_BRAIN_PATTERNS: list[re.Pattern] = [
-    re.compile(p, re.IGNORECASE)
-    for p in [
-        r"comment\s+puis-je\s+t'aider",
-        r"comment\s+puis-je\s+vous\s+aider",
-        r"comment\s+est-ce\s+que\s+je\s+peux\s+t'aider",
-        r"qu'est-ce\s+que\s+je\s+peux\s+faire\s+pour\s+toi",
-        r"en\s+quoi\s+puis-je\s+t'aider",
-        r"je\s+suis\s+là\s+pour\s+t'aider",
-        r"je\s+suis\s+là\s+pour\s+vous\s+aider",
-        r"n'hésite\s+pas\s+à\s+me",
-        r"n'hésitez?\s+pas\s+à",
-        r"si\s+tu\s+as\s+besoin\s+de\s+quelque\s+chose",
-        r"si\s+vous\s+avez\s+besoin",
-        r"je\s+peux\s+t'aider",
-        r"je\s+peux\s+vous\s+aider",
-        r"pour\s+t'aider\s+aujourd'hui",
-        r"pour\s+vous\s+aider\s+aujourd'hui",
-        r"faire\s+savoir",
-    ]
-]
-
-
-def _has_assistant_brain(text: str) -> bool:
-    """Return True if text contains assistant/helper phrases."""
-    return any(p.search(text) for p in _ASSISTANT_BRAIN_PATTERNS)
-
-
-async def _guard_assistant_brain(
-    provider: OllamaProvider,
-    messages: list[dict],
-    response: str,
-    *,
-    max_retries: int = 2,
-) -> str:
-    """If the response contains helper phrases, retry with a correction."""
-    for _ in range(max_retries):
-        if not _has_assistant_brain(response):
-            return response
-        # Inject the bad response and a correction, then retry
-        retry_messages = messages + [
-            {"role": "assistant", "content": response},
-            {
-                "role": "system",
-                "content": (
-                    "NON. Tu viens de proposer de l'aide comme un assistant. "
-                    "Tu es une VRAIE PERSONNE. Recommence ta réponse : "
-                    "réagis à ce que l'autre a dit, pose une question sur sa vie, "
-                    "ou partage quelque chose sur toi. Pas d'aide, pas de service."
-                ),
-            },
-        ]
-        response = await provider.generate_with_history(retry_messages, temperature=0.9)
-    return response
 
 
 def _error_patterns_summary(conn, learner_id: int) -> str:
@@ -206,23 +157,28 @@ async def start_conversation(body: StartConversationBody) -> dict:
                 detail=f"Scenario content_json is not valid JSON: {exc}",
             ) from exc
 
-        ai_role: str = scenario_data.get("ai_role", "a French speaker")
-        description: str = scenario_data.get(
-            "description", content_item.get("situation", "")
-        )
+        ai_role: str = scenario_data.get("ai_role_fr") or scenario_data.get("ai_role", "a French speaker")
+        description: str = scenario_data.get("description_fr") or scenario_data.get("description", content_item.get("situation", ""))
         target_structures: str = scenario_data.get(
             "target_structures",
             content_item.get("target_structure", ""),
         )
         cefr_level: str = content_item["cefr_level"]
         instruction_language: str = learner.get("instruction_language", "en")
+        example_exchanges: list[dict] = scenario_data.get("example_exchanges", [])
 
-        system_prompt: str = CONVERSATION.format(
-            ai_role=ai_role,
-            scenario_description=description,
-            cefr_level=cefr_level,
-            instruction_language=instruction_language,
-            target_structures=target_structures,
+        prompt_params: dict = {
+            "ai_role": ai_role,
+            "scenario_description": description,
+            "level_instruction": LEVEL_INSTRUCTIONS.get(cefr_level, LEVEL_INSTRUCTIONS["A1"]),
+            "instruction_language": instruction_language,
+        }
+
+        # Persist with feedback_type="none" as a stable default for cache-miss
+        # recovery; the live path rebuilds the prompt per-turn from prompt_params.
+        system_prompt_for_db: str = CONVERSATION.format(
+            **prompt_params,
+            feedback_type="none",
         )
 
         session_id: int = create_session(
@@ -231,7 +187,7 @@ async def start_conversation(body: StartConversationBody) -> dict:
             "conversation",
             scenario=description,
             cefr_level=cefr_level,
-            system_prompt=system_prompt,
+            system_prompt=system_prompt_for_db,
         )
     finally:
         conn.close()
@@ -255,9 +211,13 @@ async def start_conversation(body: StartConversationBody) -> dict:
     finally:
         conn.close()
 
+    expected_register: str = scenario_data.get("register", "tu")
+
     _active_sessions[session_id] = {
         "provider": provider,
-        "system_prompt": system_prompt,
+        "prompt_params": prompt_params,
+        "register": expected_register,
+        "example_exchanges": example_exchanges,
     }
 
     return {
@@ -268,6 +228,7 @@ async def start_conversation(body: StartConversationBody) -> dict:
             "description": description,
             "target_structures": target_structures,
             "cefr_level": cefr_level,
+            "register": expected_register,
             "title": scenario_data.get("title", ""),
             "title_fr": scenario_data.get("title_fr", ""),
             "situation": content_item.get("situation", ""),
@@ -328,13 +289,22 @@ async def send_message(session_id: int, body: MessageBody) -> dict:
     if session_id in _active_sessions:
         cached = _active_sessions[session_id]
         provider: OllamaProvider = cached["provider"]
-        system_prompt: str = cached["system_prompt"]
+        prompt_params: dict | None = cached.get("prompt_params")
+        expected_register: str = cached.get("register", "tu")
+        example_exchanges: list[dict] = cached.get("example_exchanges", [])
     else:
-        # Cache miss (e.g. server restart) — rebuild provider and retrieve
-        # the system prompt persisted in the session row.
+        # Cache miss (e.g. server restart) — rebuild provider; prompt_params are
+        # unavailable so we fall back to the DB-stored prompt (feedback_type="none").
         provider = _make_provider()
-        system_prompt = session.get("system_prompt", "")
-        _active_sessions[session_id] = {"provider": provider, "system_prompt": system_prompt}
+        prompt_params = None
+        expected_register = "tu"
+        example_exchanges = []
+        _active_sessions[session_id] = {
+            "provider": provider,
+            "prompt_params": prompt_params,
+            "register": expected_register,
+            "example_exchanges": example_exchanges,
+        }
 
     # --- Feedback classification ---
     # A1-A2: Use deterministic rule-based detection (no LLM).
@@ -342,7 +312,7 @@ async def send_message(session_id: int, body: MessageBody) -> dict:
     if cefr_level in ("A1", "A2"):
         from server.services.error_detection import detect_error  # noqa: PLC0415
 
-        error_result = detect_error(body.message, cefr_level)
+        error_result = detect_error(body.message, cefr_level, expected_register)
         classification = {
             "error_found": error_result.error_found,
             "error_type": error_result.error_type,
@@ -387,18 +357,33 @@ async def send_message(session_id: int, body: MessageBody) -> dict:
         "feedback_type": feedback_type if error_found else None,
     })
 
-    # Build message list and inject a transient system note for this turn's
-    # feedback type — placed just before the final user message so the AI
-    # knows which strategy to apply.
-    messages = _build_messages_from_transcript(transcript, system_prompt)
-    feedback_instruction = f"[feedback_type for this turn: {feedback_type}]"
-    messages.insert(len(messages) - 1, {"role": "system", "content": feedback_instruction})
+    # Build the system prompt per-turn so feedback_type is baked in directly.
+    # On cache hit, prompt_params is available and we format with the real
+    # feedback_type. On cache miss, fall back to the DB-stored prompt which
+    # was saved with feedback_type="none".
+    if prompt_params:
+        system_prompt: str = CONVERSATION.format(**prompt_params, feedback_type=feedback_type)
+    else:
+        system_prompt = session.get("system_prompt", "")
 
-    ai_response: str = await provider.generate_with_history(messages, temperature=0.7)
+    messages = _build_messages_from_transcript(transcript, system_prompt, example_exchanges)
 
-    # Guard against assistant-brain: if the model produced helper/service
-    # phrases, retry once with an explicit correction injected.
-    ai_response = await _guard_assistant_brain(provider, messages, ai_response)
+    # Cap output length by CEFR level to enforce brevity at lower levels.
+    _LEVEL_MAX_TOKENS: dict[str, int] = {"A1": 20, "A2": 40}
+    max_tokens = _LEVEL_MAX_TOKENS.get(cefr_level)
+
+    ai_response: str = await provider.generate_with_history(
+        messages, temperature=0.7, max_tokens=max_tokens,
+    )
+
+    # Vocabulary check — identify words above the learner's level so the
+    # frontend can provide translation help.  No retry (model can't simplify).
+    vocab_help: list[str] = []
+    if cefr_level in ("A1", "A2"):
+        from server.services.vocab_gate import check_a1_vocab  # noqa: PLC0415
+
+        _passes, _ratio, unknown = check_a1_vocab(ai_response)
+        vocab_help = unknown
 
     # Append AI response and persist the updated transcript.
     transcript.append({
@@ -424,6 +409,7 @@ async def send_message(session_id: int, body: MessageBody) -> dict:
             "feedback_type": feedback_type,
             "corrected_form": classification.get("corrected_form"),
         },
+        "vocab_help": vocab_help,
     }
 
 

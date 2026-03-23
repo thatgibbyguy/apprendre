@@ -13,7 +13,7 @@ class Settings:
     database_path: str = "apprendre.db"
     static_dir: Path = field(default_factory=lambda: Path(__file__).parent.parent / "static")
     ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "mistral-small"
+    ollama_model: str = "phi3:14b"
     host: str = "0.0.0.0"
     port: int = 8000
 

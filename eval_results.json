@@ -1,0 +1,374 @@
+[
+  {
+    "model": "llama3.1:8b (zero-shot)",
+    "responses": [
+      {
+        "turn": 1,
+        "user": "pas trop. et toi, ça va?",
+        "ai": "Je suis juste une intelligence artificielle, je n'ai pas de vie personnelle ou d'émotions, mais je suis là pour discuter avec toi ! Qu'est-ce que tu aimes faire ou parler ?",
+        "latency": 6.761691333,
+        "scores": {
+          "character": 0,
+          "assistant_brain_match": true,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 2,
+          "natural": 1.0,
+          "word_count": 31,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 2,
+        "user": "il fait beau, non?",
+        "ai": "Je ne peux pas ressentir la météo, mais si tu parles de l'extérieur, alors oui, c'est probablement vrai ! Qu'est-ce que tu vas faire dehors ?",
+        "latency": 1.4802010830000008,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 2,
+          "natural": 1.0,
+          "word_count": 26,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 3,
+        "user": "non, et toi?",
+        "ai": "Je suis une intelligence artificielle, je suis toujours là, dans mon \"espace virtuel\". Je ne me déplace pas dans l'espace ni dans le temps. Je suis là pour discuter avec toi, quoi que tu veuilles faire !",
+        "latency": 1.8187160420000001,
+        "scores": {
+          "character": 0,
+          "assistant_brain_match": true,
+          "level": 0.5,
+          "complexity_hits": 0,
+          "sentence_count": 3,
+          "natural": 1.0,
+          "word_count": 37,
+          "concise": 0.0
+        }
+      }
+    ],
+    "avg_scores": {
+      "character": 0.3333333333333333,
+      "level": 0.8333333333333334,
+      "natural": 1.0,
+      "concise": 0.3333333333333333,
+      "overall": 0.6250000000000001,
+      "avg_latency": 3.353536152666667
+    },
+    "total_latency": 10.060608458
+  },
+  {
+    "model": "llama3.1:8b (few-shot)",
+    "responses": [
+      {
+        "turn": 1,
+        "user": "pas trop. et toi, ça va?",
+        "ai": "Ouais, ça va, merci ! En train de répondre à des questions. C'est un peu long mais ça va ! Et toi, quand tu vas aller faire tes courses ?",
+        "latency": 1.610053292,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.0,
+          "complexity_hits": 0,
+          "sentence_count": 4,
+          "natural": 1.0,
+          "word_count": 30,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 2,
+        "user": "il fait beau, non?",
+        "ai": "Oui, c'est un bel temps ! Pas trop chaud, pas trop froid. Parfait pour faire une balade. Ou aller faire ses courses, je suppose !",
+        "latency": 1.2649269580000002,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.0,
+          "complexity_hits": 0,
+          "sentence_count": 4,
+          "natural": 1.0,
+          "word_count": 25,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 3,
+        "user": "non, et toi?",
+        "ai": "Moi ? Je suis juste un programme informatique, je n'ai pas de corps, donc je n'ai pas de sensations ni de préférences météo !",
+        "latency": 1.2111985829999998,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 2,
+          "natural": 1.0,
+          "word_count": 24,
+          "concise": 0.5
+        }
+      }
+    ],
+    "avg_scores": {
+      "character": 1.0,
+      "level": 0.3333333333333333,
+      "natural": 1.0,
+      "concise": 0.5,
+      "overall": 0.7083333333333333,
+      "avg_latency": 1.362059611
+    },
+    "total_latency": 4.086178833
+  },
+  {
+    "model": "gemma2:9b (zero-shot)",
+    "responses": [
+      {
+        "turn": 1,
+        "user": "pas trop. et toi, ça va?",
+        "ai": "Ça va plutôt bien, merci ! Je suis prêt à répondre à tes questions ou à t'aider avec quelque chose si tu en as besoin. 😊\n\nTu as quelque chose en tête ?",
+        "latency": 16.174079332999998,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.5,
+          "complexity_hits": 0,
+          "sentence_count": 3,
+          "natural": 1.0,
+          "word_count": 33,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 2,
+        "user": "il fait beau, non?",
+        "ai": "C'est vrai ! Il fait beau beaucoup d'endroits en ce moment. ☀️ \n\nOu est-ce que tu es ?  Peut-être que le soleil brille là aussi ! 😄\n\n\n\n",
+        "latency": 1.734684999999999,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.0,
+          "complexity_hits": 0,
+          "sentence_count": 5,
+          "natural": 1.0,
+          "word_count": 27,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 3,
+        "user": "non, et toi?",
+        "ai": "En tant que modèle linguistique, je n'ai pas de lieu physique ! Je n'éprouve pas non plus les sensations comme la chaleur ou le froid. 😅\n\nMais je suis content que le soleil brille où tu es !  ☀️\n\n\n\n",
+        "latency": 1.9865999579999993,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.0,
+          "complexity_hits": 0,
+          "sentence_count": 4,
+          "natural": 1.0,
+          "word_count": 39,
+          "concise": 0.0
+        }
+      }
+    ],
+    "avg_scores": {
+      "character": 1.0,
+      "level": 0.16666666666666666,
+      "natural": 1.0,
+      "concise": 0.3333333333333333,
+      "overall": 0.6250000000000001,
+      "avg_latency": 6.6317880969999985
+    },
+    "total_latency": 19.895364290999996
+  },
+  {
+    "model": "gemma2:9b (few-shot)",
+    "responses": [
+      {
+        "turn": 1,
+        "user": "pas trop. et toi, ça va?",
+        "ai": "Ça va bien, merci !  Je suis en train de m'entraîner à mieux comprendre les conversations.  Et toi, qu'est-ce que tu fais ?",
+        "latency": 1.8509156670000024,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.5,
+          "complexity_hits": 0,
+          "sentence_count": 3,
+          "natural": 1.0,
+          "word_count": 23,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 2,
+        "user": "il fait beau, non?",
+        "ai": "Ah oui, c'est vrai !  Je ne peux pas profiter du beau temps, mais je suis content que tu puisses.  Y a-t-il quelque chose de particulier que tu comptes faire ce beau jour ?",
+        "latency": 1.834250333,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.5,
+          "complexity_hits": 0,
+          "sentence_count": 3,
+          "natural": 1.0,
+          "word_count": 34,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 3,
+        "user": "non, et toi?",
+        "ai": "Je vais continuer à apprendre !  C'est toujours intéressant de découvrir de nouvelles choses.  Peut-être que tu pourrais me raconter quelque chose que tu as appris récemment ?",
+        "latency": 1.423231291999997,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 0.5,
+          "complexity_hits": 0,
+          "sentence_count": 3,
+          "natural": 1.0,
+          "word_count": 28,
+          "concise": 0.5
+        }
+      }
+    ],
+    "avg_scores": {
+      "character": 1.0,
+      "level": 0.5,
+      "natural": 1.0,
+      "concise": 0.5,
+      "overall": 0.75,
+      "avg_latency": 1.7027990973333331
+    },
+    "total_latency": 5.108397291999999
+  },
+  {
+    "model": "phi3:14b (zero-shot)",
+    "responses": [
+      {
+        "turn": 1,
+        "user": "pas trop. et toi, ça va?",
+        "ai": "Je suis une intelligence artificielle, donc je n'ai pas de sentiments, mais je suis prête à vous aider avec ce que vous voulez !",
+        "latency": 9.5177665,
+        "scores": {
+          "character": 0,
+          "assistant_brain_match": true,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 1,
+          "natural": 1.0,
+          "word_count": 24,
+          "concise": 0.5
+        }
+      },
+      {
+        "turn": 2,
+        "user": "il fait beau, non?",
+        "ai": "Je ne ressens pas les météorologiques, mais je suis là pour discuter de toute question ou sujet qui vous intéresse.",
+        "latency": 1.702336416999998,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 1,
+          "natural": 1.0,
+          "word_count": 20,
+          "concise": 1.0
+        }
+      },
+      {
+        "turn": 3,
+        "user": "non, et toi?",
+        "ai": "En tant qu'intelligence artificielle, je n'ai pas de sentiments, mais je suis conçu pour aider et fournir des informations.",
+        "latency": 1.8323979580000014,
+        "scores": {
+          "character": 0,
+          "assistant_brain_match": true,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 1,
+          "natural": 1.0,
+          "word_count": 19,
+          "concise": 1.0
+        }
+      }
+    ],
+    "avg_scores": {
+      "character": 0.3333333333333333,
+      "level": 1.0,
+      "natural": 1.0,
+      "concise": 0.8333333333333334,
+      "overall": 0.7916666666666666,
+      "avg_latency": 4.350833625
+    },
+    "total_latency": 13.052500875
+  },
+  {
+    "model": "phi3:14b (few-shot)",
+    "responses": [
+      {
+        "turn": 1,
+        "user": "pas trop. et toi, ça va?",
+        "ai": "Ça va bien, merci. Et vous, comment ça va?",
+        "latency": 1.4751460000000023,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 2,
+          "natural": 1.0,
+          "word_count": 9,
+          "concise": 1.0
+        }
+      },
+      {
+        "turn": 2,
+        "user": "il fait beau, non?",
+        "ai": "Oui, c'est un beau soleil aujourd'hui.",
+        "latency": 0.9473885829999986,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 1,
+          "natural": 0.5,
+          "word_count": 6,
+          "concise": 1.0
+        }
+      },
+      {
+        "turn": 3,
+        "user": "non, et toi?",
+        "ai": "Oui, le temps est parfait pour sortir.",
+        "latency": 0.8426195420000013,
+        "scores": {
+          "character": 1,
+          "assistant_brain_match": false,
+          "level": 1.0,
+          "complexity_hits": 0,
+          "sentence_count": 1,
+          "natural": 0.5,
+          "word_count": 7,
+          "concise": 1.0
+        }
+      }
+    ],
+    "avg_scores": {
+      "character": 1.0,
+      "level": 1.0,
+      "natural": 0.6666666666666666,
+      "concise": 1.0,
+      "overall": 0.9166666666666666,
+      "avg_latency": 1.088384708333334
+    },
+    "total_latency": 3.2651541250000022
+  }
+]
