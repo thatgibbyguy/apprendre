@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome — Apprendre</title>
+  <title>Assessment — Apprendre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
@@ -13,64 +13,111 @@
     .assessment-layout {
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
     }
+
     .assessment-layout__body {
       flex: 1;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
+
+    /* Welcome screen */
     .assessment-welcome {
-      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: var(--ply-space-xxl) var(--ply-space-lg);
-      max-width: 32rem;
-      margin: 0 auto;
+      text-align: center;
     }
-    .assessment-welcome h1 {
+
+    .assessment-welcome__inner {
+      max-width: 30rem;
+    }
+
+    .assessment-welcome__heading {
+      font-family: var(--ply-font-heading);
       margin-bottom: var(--ply-space-sm);
     }
-    .assessment-welcome p {
+
+    .assessment-welcome__body {
       color: var(--ply-color-secondary);
       line-height: 1.6;
+      margin-bottom: var(--ply-space-xxl);
     }
+
+    /* Chat thread — fills remaining space and scrolls */
+    .assessment-thread-wrap {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* Error banner */
+    .assessment-error {
+      background: var(--ply-red-surface);
+      border: 1px solid var(--ply-red-border);
+      color: var(--ply-red-3);
+      border-radius: 0.5rem;
+      padding: var(--ply-space-sm) var(--ply-space-md);
+      margin: var(--ply-space-md) var(--ply-space-xxl);
+      font-size: 0.875rem;
+    }
+
+    /* Result card */
     .level-result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--ply-space-xxl) var(--ply-space-lg);
+    }
+
+    .level-result__card {
       background: var(--ply-bg-surface);
       border: 1px solid var(--ply-border-color);
       border-radius: 0.75rem;
       padding: var(--ply-space-xl);
+      width: 100%;
       max-width: 28rem;
-      margin: var(--ply-space-xl) auto;
       text-align: center;
       box-shadow: 0 2px 8px var(--ply-shadow-2);
     }
+
     .level-result__heading {
       font-family: var(--ply-font-heading);
       color: var(--ply-color-headings);
       margin: 0 0 var(--ply-space-lg) 0;
     }
+
     .level-result__skills {
       display: flex;
       justify-content: center;
       gap: var(--ply-space-lg);
+      flex-wrap: wrap;
       margin-bottom: var(--ply-space-lg);
     }
+
     .level-result__skill {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: var(--ply-space-xs);
     }
+
     .level-result__skill-label {
       color: var(--ply-color-secondary);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .level-result__encouragement {
       color: var(--ply-color-secondary);
       font-style: italic;
       line-height: 1.5;
-      margin-bottom: var(--ply-space-lg);
+      margin-bottom: var(--ply-space-xl);
     }
   </style>
 </head>
@@ -78,73 +125,369 @@
   <a href="#main" class="skip-link">Skip to main content</a>
 
   <div class="assessment-layout">
-    <!-- Minimal header for assessment flow -->
+
     <header>
       <nav class="navbar navbar-borderless" aria-label="Main navigation">
         <ul>
           <li><strong>Apprendre</strong></li>
+          <li class="margin-left-auto">
+            <button class="btn btn-ghost btn-icon btn-sm" id="theme-toggle" aria-label="Toggle dark mode">
+              <i data-feather="moon"></i>
+            </button>
+          </li>
         </ul>
       </nav>
     </header>
 
     <main id="main" class="assessment-layout__body">
 
-      <!-- Welcome message — shown initially -->
+      <!-- Welcome screen — shown before assessment begins -->
       <div class="assessment-welcome" id="assessment-welcome">
-        <h1 class="text-2xl">Bonjour.</h1>
-        <p class="text-lg">Let's find out where you are.</p>
-        <p class="margin-top text-tertiary">We'll have a short conversation — just three prompts. Answer in French as best you can. There are no wrong answers.</p>
-        <button class="btn btn-primary margin-top-lg" id="start-assessment">Begin</button>
+        <div class="assessment-welcome__inner">
+          <h1 class="assessment-welcome__heading text-2xl">Bonjour.</h1>
+          <p class="assessment-welcome__body text-lg">
+            Let's find out where you are.<br>
+            <span class="text-tertiary">We'll have a short conversation — just a few exchanges. Answer in French as best you can. There are no wrong answers.</span>
+          </p>
+          <button class="btn btn-primary" id="start-assessment">Begin</button>
+        </div>
       </div>
 
-      <!-- Chat area for assessment conversation — hidden initially -->
-      <div class="chat-thread" id="assessment-thread" role="log" aria-label="Assessment conversation" aria-live="polite" hidden>
-        <!-- DYNAMIC: assessment prompts and responses populated by JS -->
-        <!--
-          Assessment prompts (from User Journey):
-          1. "Tell me about yourself in French."
-          2. "What did you do yesterday?"
-          3. "What do you think about [something simple]?"
-        -->
+      <!-- Chat area — hidden until assessment begins -->
+      <div class="assessment-thread-wrap" id="assessment-thread-wrap" hidden>
+        <div
+          class="chat-thread"
+          id="assessment-thread"
+          role="log"
+          aria-label="Assessment conversation"
+          aria-live="polite"
+        ></div>
       </div>
 
-      <!-- Level result card — hidden until assessment complete -->
-      <div id="level-result" hidden>
-        <div class="level-result">
+      <!-- Error banner — shown on API failure -->
+      <p class="assessment-error" id="assessment-error" hidden aria-live="assertive"></p>
+
+      <!-- Level result card — shown when assessment is complete -->
+      <div class="level-result" id="level-result" hidden>
+        <div class="level-result__card">
           <h2 class="level-result__heading text-lg">Your starting point</h2>
-          <div class="level-result__skills">
-            <!-- DYNAMIC: assessed levels -->
-            <div class="level-result__skill">
-              <span class="level-result__skill-label text-xs">Speaking</span>
-              <span class="level-badge text-xs level-badge--a1">A1</span>
-            </div>
-            <div class="level-result__skill">
-              <span class="level-result__skill-label text-xs">Reading</span>
-              <span class="level-badge text-xs level-badge--a2">A2</span>
-            </div>
-            <div class="level-result__skill">
-              <span class="level-result__skill-label text-xs">Listening</span>
-              <span class="level-badge text-xs level-badge--a2">A2</span>
-            </div>
+          <div class="level-result__skills" id="level-result-skills">
+            <!-- Populated by JS -->
           </div>
-          <!-- DYNAMIC: encouragement text -->
-          <p class="level-result__encouragement text-sm">You understand more than you can say yet. That's normal — and exactly what we're going to work on.</p>
-          <a href="dashboard.html" class="btn btn-primary">Go to your dashboard</a>
+          <p class="level-result__encouragement text-sm" id="level-result-encouragement"></p>
+          <a href="dashboard.html" class="btn btn-primary">Continue to Dashboard</a>
         </div>
       </div>
 
     </main>
 
-    <!-- Chat input for assessment — hidden initially -->
+    <!-- Chat input footer — hidden until assessment begins -->
     <footer id="assessment-input-area" hidden>
       <div class="chat-input-area">
         <label for="assessment-input" class="sr-only">Type your response in French</label>
-        <input type="text" id="assessment-input" placeholder="Ecrivez en francais..." autocomplete="off">
+        <input
+          type="text"
+          id="assessment-input"
+          placeholder="Ecrivez en francais..."
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
         <button class="btn btn-primary btn-icon" id="assessment-send" aria-label="Send response">
           <i data-feather="send"></i>
         </button>
       </div>
     </footer>
+
   </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var STORAGE_KEY = 'apprendre_learner_id';
+      var API_BASE = '/api/assessment';
+
+      var learnerId = null;
+      var sessionId = null;
+      var isWaiting = false;
+
+      // ─── DOM refs ───
+      var welcomeEl = document.getElementById('assessment-welcome');
+      var threadWrap = document.getElementById('assessment-thread-wrap');
+      var thread = document.getElementById('assessment-thread');
+      var errorEl = document.getElementById('assessment-error');
+      var inputArea = document.getElementById('assessment-input-area');
+      var inputEl = document.getElementById('assessment-input');
+      var sendBtn = document.getElementById('assessment-send');
+      var startBtn = document.getElementById('start-assessment');
+      var levelResult = document.getElementById('level-result');
+      var levelSkills = document.getElementById('level-result-skills');
+      var levelEncouragement = document.getElementById('level-result-encouragement');
+
+      // ─── Helpers ───
+
+      function showError(msg) {
+        errorEl.textContent = msg;
+        errorEl.hidden = false;
+      }
+
+      function clearError() {
+        errorEl.textContent = '';
+        errorEl.hidden = true;
+      }
+
+      function setInputDisabled(disabled) {
+        inputEl.disabled = disabled;
+        sendBtn.disabled = disabled;
+        isWaiting = disabled;
+      }
+
+      /**
+       * Append a chat message bubble to the thread.
+       * sender: 'ai' | 'learner'
+       */
+      function appendMessage(sender, text) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'chat-message chat-message--' + sender;
+
+        var label = document.createElement('span');
+        label.className = 'chat-sender text-xs';
+        label.setAttribute('aria-hidden', 'true');
+        label.textContent = sender === 'learner' ? 'You' : 'Apprendre';
+
+        var bubble = document.createElement('div');
+        bubble.className = 'chat-bubble';
+        bubble.textContent = text;
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(bubble);
+        thread.appendChild(wrapper);
+        scrollThread();
+      }
+
+      function showTypingIndicator() {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'chat-message chat-message--ai';
+        wrapper.id = 'typing-indicator';
+
+        var label = document.createElement('span');
+        label.className = 'chat-sender text-xs';
+        label.setAttribute('aria-hidden', 'true');
+        label.textContent = 'Apprendre';
+
+        var indicator = document.createElement('div');
+        indicator.className = 'typing-indicator';
+        indicator.setAttribute('aria-label', 'Apprendre is thinking');
+        indicator.innerHTML =
+          '<span class="typing-indicator__dot"></span>' +
+          '<span class="typing-indicator__dot"></span>' +
+          '<span class="typing-indicator__dot"></span>';
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(indicator);
+        thread.appendChild(wrapper);
+        scrollThread();
+        return wrapper;
+      }
+
+      function removeTypingIndicator() {
+        var el = document.getElementById('typing-indicator');
+        if (el) el.remove();
+      }
+
+      function scrollThread() {
+        threadWrap.scrollTop = threadWrap.scrollHeight;
+      }
+
+      /**
+       * Build the CEFR level badge element.
+       * level: 'A1' | 'A2' | 'B1' | 'B2'
+       */
+      function makeLevelBadge(level) {
+        var span = document.createElement('span');
+        span.className = 'level-badge text-xs level-badge--' + level.toLowerCase();
+        span.textContent = level;
+        return span;
+      }
+
+      /**
+       * Render the level result card from the assessment data.
+       * assessmentData: { assessment: { speaking, listening, reading, writing } }
+       */
+      function showLevelResult(assessmentData) {
+        var levels = (assessmentData && assessmentData.assessment) || {};
+        var skillOrder = ['speaking', 'listening', 'reading', 'writing'];
+        var skillLabels = {
+          speaking: 'Speaking',
+          listening: 'Listening',
+          reading: 'Reading',
+          writing: 'Writing',
+        };
+
+        levelSkills.innerHTML = '';
+        skillOrder.forEach(function (skill) {
+          var level = levels[skill];
+          if (!level) return;
+
+          var skillEl = document.createElement('div');
+          skillEl.className = 'level-result__skill';
+
+          var labelEl = document.createElement('span');
+          labelEl.className = 'level-result__skill-label text-xs';
+          labelEl.textContent = skillLabels[skill];
+
+          skillEl.appendChild(labelEl);
+          skillEl.appendChild(makeLevelBadge(level));
+          levelSkills.appendChild(skillEl);
+        });
+
+        // Pick an encouragement message based on speaking level
+        var speaking = (levels.speaking || 'A1').toUpperCase();
+        var encouragements = {
+          A1: 'You understand more than you can say yet. That\'s normal — and exactly what we\'re going to work on.',
+          A2: 'You have a solid foundation. Let\'s build on it with real conversations.',
+          B1: 'You can hold your own. Now let\'s sharpen the details.',
+          B2: 'You\'re well on your way. Time to go deeper.',
+        };
+        levelEncouragement.textContent = encouragements[speaking] || encouragements['A1'];
+
+        // Transition: hide chat, show result
+        inputArea.hidden = true;
+        threadWrap.hidden = true;
+        levelResult.hidden = false;
+      }
+
+      // ─── API calls ───
+
+      /**
+       * POST /api/assessment/ to start a session.
+       * Returns { session_id, message }.
+       */
+      function apiStart() {
+        return fetch(API_BASE + '/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ learner_id: learnerId }),
+        }).then(function (res) {
+          if (!res.ok) {
+            return res.json().then(function (d) {
+              throw new Error(d.detail || 'Could not start assessment. Please try again.');
+            });
+          }
+          return res.json();
+        });
+      }
+
+      /**
+       * POST /api/assessment/{session_id}/message with the learner's text.
+       * Returns { message, complete, assessment? }.
+       */
+      function apiSendMessage(text) {
+        return fetch(API_BASE + '/' + sessionId + '/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text }),
+        }).then(function (res) {
+          if (!res.ok) {
+            return res.json().then(function (d) {
+              throw new Error(d.detail || 'Something went wrong. Please try again.');
+            });
+          }
+          return res.json();
+        });
+      }
+
+      // ─── Event handlers ───
+
+      startBtn.addEventListener('click', function () {
+        clearError();
+        startBtn.disabled = true;
+        startBtn.textContent = 'Starting...';
+
+        apiStart()
+          .then(function (data) {
+            sessionId = data.session_id;
+
+            // Reveal chat UI
+            welcomeEl.hidden = true;
+            threadWrap.hidden = false;
+            inputArea.hidden = false;
+
+            appendMessage('ai', data.message);
+            inputEl.focus();
+          })
+          .catch(function (err) {
+            startBtn.disabled = false;
+            startBtn.textContent = 'Begin';
+            showError(err.message);
+          });
+      });
+
+      function handleSend() {
+        if (isWaiting) return;
+        var text = inputEl.value.trim();
+        if (!text) return;
+
+        clearError();
+        appendMessage('learner', text);
+        inputEl.value = '';
+
+        setInputDisabled(true);
+        var typingEl = showTypingIndicator();
+
+        apiSendMessage(text)
+          .then(function (data) {
+            removeTypingIndicator();
+
+            // Strip the raw JSON block from the AI message before displaying
+            var displayMessage = data.message
+              .replace(/```json[\s\S]*?```/g, '')
+              .replace(/\{"assessment"[\s\S]*\}/, '')
+              .trim();
+
+            appendMessage('ai', displayMessage);
+
+            if (data.complete) {
+              setInputDisabled(true);
+              showLevelResult(data.assessment);
+            } else {
+              setInputDisabled(false);
+              inputEl.focus();
+            }
+          })
+          .catch(function (err) {
+            removeTypingIndicator();
+            setInputDisabled(false);
+            showError(err.message);
+            inputEl.focus();
+          });
+      }
+
+      sendBtn.addEventListener('click', handleSend);
+
+      inputEl.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSend();
+        }
+      });
+
+      // ─── Init ───
+
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof feather !== 'undefined') feather.replace();
+
+        // Guard: must have a learner_id in localStorage
+        var stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored || isNaN(parseInt(stored, 10))) {
+          window.location.href = 'index.html';
+          return;
+        }
+        learnerId = parseInt(stored, 10);
+      });
+
+    })();
+  </script>
 </body>
 </html>
