@@ -19,6 +19,226 @@ except OSError:
 # POS tags that carry vocabulary meaning (skip function words/punct).
 _CONTENT_POS = {"NOUN", "VERB", "ADJ", "ADV", "AUX"}
 
+# English translations for above-A1 lemmas that a constrained LLM may still
+# produce.  Keyed by French lemma (lowercase infinitive/singular).  This list
+# is intentionally modest — it covers the most common leakage words so the
+# learner gets useful tooltip text.  Unknown lemmas fall back to None and the
+# frontend shows a generic "new word" label.
+TRANSLATIONS: dict[str, str] = {
+    # Common verbs above A1
+    "dérouler": "to unfold / to go (as in how things go)",
+    "se dérouler": "to take place / to unfold",
+    "expliquer": "to explain",
+    "utiliser": "to use",
+    "décider": "to decide",
+    "proposer": "to propose / to suggest",
+    "sembler": "to seem",
+    "devenir": "to become",
+    "créer": "to create",
+    "produire": "to produce",
+    "réaliser": "to realise / to achieve",
+    "obtenir": "to obtain / to get",
+    "représenter": "to represent",
+    "présenter": "to present / to introduce",
+    "participer": "to participate",
+    "rejoindre": "to join / to meet up with",
+    "améliorer": "to improve",
+    "organiser": "to organise",
+    "gérer": "to manage",
+    "profiter": "to take advantage of / to enjoy",
+    "dépenser": "to spend (money)",
+    "économiser": "to save (money)",
+    "réserver": "to reserve / to book",
+    "commander": "to order (food/drink)",
+    "calculer": "to calculate",
+    "expédier": "to send / to dispatch",
+    "confirmer": "to confirm",
+    "annuler": "to cancel",
+    "vérifier": "to check / to verify",
+    "installer": "to install / to set up",
+    "télécharger": "to download",
+    "enregistrer": "to record / to save",
+    "imprimer": "to print",
+    "brancher": "to plug in",
+    "allumer": "to turn on / to light",
+    "éteindre": "to turn off / to extinguish",
+    "remplacer": "to replace",
+    "réparer": "to repair / to fix",
+    "nettoyer": "to clean",
+    "ranger": "to tidy up / to put away",
+    "jeter": "to throw / to throw away",
+    "ramasser": "to pick up / to collect",
+    "conduire": "to drive",
+    "suivre": "to follow",
+    "remplir": "to fill",
+    "quitter": "to leave (a place)",
+    "rejoindre": "to join / to meet",
+    "s'asseoir": "to sit down",
+    "s'endormir": "to fall asleep",
+    "se lever": "to get up",
+    "se souvenir": "to remember",
+    # Common nouns above A1
+    "quartier": "neighbourhood",
+    "chemin": "path / way",
+    "carrefour": "crossroads / intersection",
+    "trottoir": "pavement / sidewalk",
+    "feu": "traffic light / fire",
+    "panneau": "sign / panel",
+    "couloir": "corridor / hallway",
+    "ascenseur": "lift / elevator",
+    "parking": "car park / parking lot",
+    "station": "station",
+    "arrêt": "stop (bus/tram)",
+    "marché": "market",
+    "pharmacie": "pharmacy",
+    "boulangerie": "bakery",
+    "épicerie": "grocer's shop",
+    "librairie": "bookshop",
+    "coiffeur": "hairdresser",
+    "médecin": "doctor",
+    "hôpital": "hospital",
+    "urgence": "emergency",
+    "rendez-vous": "appointment / meeting",
+    "formulaire": "form (document)",
+    "carte": "card / map",
+    "facture": "bill / invoice",
+    "reçu": "receipt",
+    "caisse": "checkout / till",
+    "rayon": "aisle / shelf (in a shop)",
+    "étiquette": "label / tag",
+    "taille": "size / waist",
+    "pointure": "shoe size",
+    "remise": "discount",
+    "promotion": "special offer",
+    "recette": "recipe",
+    "ingrédient": "ingredient",
+    "quantité": "quantity",
+    "portion": "portion",
+    "plat": "dish / flat",
+    "entrée": "starter / entrance",
+    "dessert": "dessert",
+    "boisson": "drink / beverage",
+    "addition": "bill (restaurant)",
+    "pourboire": "tip (gratuity)",
+    "réservation": "reservation / booking",
+    "logement": "accommodation / housing",
+    "loyer": "rent",
+    "charges": "bills / utility charges",
+    "propriétaire": "owner / landlord",
+    "locataire": "tenant",
+    "canapé": "sofa / couch",
+    "fauteuil": "armchair",
+    "étagère": "shelf",
+    "placard": "cupboard / closet",
+    "tiroir": "drawer",
+    "robinet": "tap / faucet",
+    "douche": "shower",
+    "baignoire": "bathtub",
+    "serviette": "towel / napkin",
+    "couverture": "blanket / cover",
+    "oreiller": "pillow",
+    "matelas": "mattress",
+    "rideau": "curtain",
+    "tapis": "rug / carpet",
+    "vêtement": "clothing / garment",
+    "manteau": "coat",
+    "veste": "jacket",
+    "pantalon": "trousers / pants",
+    "chemise": "shirt",
+    "robe": "dress",
+    "jupe": "skirt",
+    "chaussure": "shoe",
+    "chaussette": "sock",
+    "chapeau": "hat",
+    "écharpe": "scarf",
+    "gant": "glove",
+    "ceinture": "belt",
+    "lunette": "glasses (spectacles)",
+    # Common adjectives above A1
+    "magnifique": "magnificent / wonderful",
+    "formidable": "great / tremendous",
+    "merveilleux": "marvellous / wonderful",
+    "délicieux": "delicious",
+    "savoureux": "tasty / flavourful",
+    "frais": "fresh / cool",
+    "tiède": "lukewarm / mild",
+    "épicé": "spicy",
+    "sucré": "sweet",
+    "salé": "salty / savoury",
+    "amer": "bitter",
+    "léger": "light / lightweight",
+    "lourd": "heavy",
+    "solide": "solid / sturdy",
+    "fragile": "fragile / delicate",
+    "pratique": "practical / handy",
+    "confortable": "comfortable",
+    "calme": "calm / quiet",
+    "bruyant": "noisy / loud",
+    "lumineux": "bright / luminous",
+    "sombre": "dark / gloomy",
+    "spacieux": "spacious",
+    "étroit": "narrow / tight",
+    "moderne": "modern",
+    "ancien": "old / former / ancient",
+    "usé": "worn out / used",
+    "sale": "dirty",
+    "rapide": "fast / quick",
+    "lent": "slow",
+    "fort": "strong / loud",
+    "doux": "soft / gentle / sweet",
+    "dur": "hard / tough",
+    "souple": "flexible / supple",
+    "rigide": "rigid / stiff",
+    "désagréable": "unpleasant",
+    "utile": "useful",
+    "inutile": "useless",
+    "disponible": "available",
+    "occupé": "busy / occupied",
+    "pressé": "in a hurry",
+    "désolé": "sorry",
+    "ravi": "delighted",
+    "satisfait": "satisfied",
+    "déçu": "disappointed",
+    "surpris": "surprised",
+    "inquiet": "worried / anxious",
+    "soulagé": "relieved",
+    "fier": "proud",
+    "jaloux": "jealous",
+    "curieux": "curious",
+    # Common adverbs above A1
+    "notamment": "notably / in particular",
+    "cependant": "however",
+    "pourtant": "yet / however / still",
+    "néanmoins": "nevertheless",
+    "ainsi": "thus / in this way",
+    "finalement": "finally / eventually",
+    "récemment": "recently",
+    "actuellement": "currently / at present",
+    "généralement": "generally",
+    "particulièrement": "particularly",
+    "exactement": "exactly",
+    "absolument": "absolutely",
+    "certainement": "certainly",
+    "probablement": "probably",
+    "rapidement": "quickly / rapidly",
+    "lentement": "slowly",
+    "doucement": "gently / softly / slowly",
+    "fortement": "strongly / greatly",
+    "simplement": "simply",
+    "clairement": "clearly",
+    "directement": "directly",
+    "ensemble": "together",
+    "séparément": "separately",
+    "partout": "everywhere",
+    "nulle part": "nowhere",
+    "quelque part": "somewhere",
+    "n'importe où": "anywhere",
+    "autrefois": "formerly / in the past",
+    "désormais": "from now on / henceforth",
+    "longtemps": "for a long time",
+    "parfaitement": "perfectly",
+}
+
 # A1 vocabulary — ~500 most common French lemmas a beginner would know.
 # Verbs as infinitives, nouns as singular, all lowercase.
 A1_WORDS: set[str] = {
@@ -150,19 +370,30 @@ A1_WORDS: set[str] = {
 }
 
 
-def check_a1_vocab(text: str) -> tuple[bool, float, list[str]]:
+def check_a1_vocab(
+    text: str,
+) -> tuple[bool, float, list[dict[str, str | None]]]:
     """Check if text uses mostly A1 vocabulary.
 
     Returns:
         (passes, ratio_known, unknown_words)
-        passes is True if ≥70% of content words are A1-level.
+
+        passes is True if ≥90% of content words are A1-level.
+
+        unknown_words is a list of dicts, one per above-level token::
+
+            {
+                "word":        str,        # surface form as it appears in the text
+                "lemma":       str,        # French base form / infinitive
+                "translation": str | None, # English translation if known, else None
+            }
     """
     if _nlp is None:
         return True, 1.0, []
 
     doc = _nlp(text)
     content_lemmas: list[str] = []
-    unknown: list[str] = []
+    unknown: list[dict[str, str | None]] = []
 
     for token in doc:
         if token.pos_ not in _CONTENT_POS:
@@ -173,7 +404,13 @@ def check_a1_vocab(text: str) -> tuple[bool, float, list[str]]:
         lemma = token.lemma_.lower()
         content_lemmas.append(lemma)
         if lemma not in A1_WORDS:
-            unknown.append(f"{token.text} ({lemma})")
+            unknown.append(
+                {
+                    "word": token.text,
+                    "lemma": lemma,
+                    "translation": TRANSLATIONS.get(lemma),
+                }
+            )
 
     if not content_lemmas:
         return True, 1.0, []
