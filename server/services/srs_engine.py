@@ -9,7 +9,7 @@ import sqlite3
 from datetime import datetime, timezone
 from typing import Optional
 
-from fsrs import FSRS, Card, Rating, State
+from fsrs import Scheduler, Card, Rating, State
 
 from server.models.database import (
     create_card,
@@ -23,8 +23,8 @@ from server.models.database import (
 # ---------------------------------------------------------------------------
 
 # Map py-fsrs State enum values to the string names stored in the DB.
+# Note: fsrs v5+ removed State.New; new cards are State.Learning with step=0.
 _STATE_TO_DB: dict[State, str] = {
-    State.New: "new",
     State.Learning: "learning",
     State.Review: "review",
     State.Relearning: "relearning",
@@ -32,8 +32,9 @@ _STATE_TO_DB: dict[State, str] = {
 
 # Reverse map for reconstructing a py-fsrs Card from DB data.
 _DB_TO_STATE: dict[str, State] = {v: k for k, v in _STATE_TO_DB.items()}
+_DB_TO_STATE["new"] = State.Learning  # legacy "new" maps to Learning
 
-_SCHEDULER = FSRS()
+_SCHEDULER = Scheduler()
 
 
 def _now_utc() -> datetime:
@@ -67,15 +68,15 @@ def _db_card_to_fsrs(card_row: dict) -> Card:
     """Reconstruct a py-fsrs Card from a DB card row.
 
     py-fsrs Card fields that we persist: difficulty, stability, due, last_review,
-    reps, lapses, state.  All other FSRS internals are derived by the scheduler.
+    step, state.  fsrs v5+ replaced reps/lapses with step.
     """
     fsrs_card = Card()
     state_str = card_row.get("state", "new")
-    fsrs_card.state = _DB_TO_STATE.get(state_str, State.New)
+    fsrs_card.state = _DB_TO_STATE.get(state_str, State.Learning)
     fsrs_card.difficulty = float(card_row.get("difficulty") or 0.0)
     fsrs_card.stability = float(card_row.get("stability") or 0.0)
-    fsrs_card.reps = int(card_row.get("reps") or 0)
-    fsrs_card.lapses = int(card_row.get("lapses") or 0)
+    # DB "reps" column stores the fsrs step value (repurposed after API change).
+    fsrs_card.step = int(card_row.get("reps") or 0)
 
     due_str = card_row.get("due_date")
     if due_str:
@@ -133,15 +134,11 @@ def schedule_review(conn: sqlite3.Connection, card_id: int, rating: int) -> dict
     fsrs_card = _db_card_to_fsrs(card_row)
     updated_fsrs_card, review_log = _SCHEDULER.review_card(fsrs_card, fsrs_rating, now)
 
-    # scheduled_days is how many days until the next due date.
-    scheduled_days: float = getattr(updated_fsrs_card, "scheduled_days", 0.0) or 0.0
-
-    # Compute retrievability (FSRS R value).  py-fsrs may or may not expose
-    # get_retrievability; fall back to reading .retrievability if available.
+    # Compute retrievability (FSRS R value).
     retrievability: float = 1.0
-    if hasattr(_SCHEDULER, "get_retrievability"):
+    if hasattr(_SCHEDULER, "get_card_retrievability"):
         try:
-            retrievability = _SCHEDULER.get_retrievability(updated_fsrs_card)
+            retrievability = _SCHEDULER.get_card_retrievability(updated_fsrs_card)
         except Exception:
             pass
     elif hasattr(updated_fsrs_card, "retrievability"):
@@ -150,15 +147,20 @@ def schedule_review(conn: sqlite3.Connection, card_id: int, rating: int) -> dict
     due_dt: Optional[datetime] = getattr(updated_fsrs_card, "due", None)
     last_review_dt: Optional[datetime] = getattr(updated_fsrs_card, "last_review", now)
 
+    # Compute scheduled_days from due date delta.
+    scheduled_days: float = 0.0
+    if due_dt and last_review_dt:
+        scheduled_days = max(0.0, (due_dt - last_review_dt).total_seconds() / 86400)
+
     update_card(conn, card_id, {
         "difficulty": float(updated_fsrs_card.difficulty or 0.0),
         "stability": float(updated_fsrs_card.stability or 0.0),
         "retrievability": retrievability,
         "due_date": _format_dt(due_dt) if due_dt else None,
         "last_review": _format_dt(last_review_dt) if last_review_dt else _format_dt(now),
-        "reps": int(updated_fsrs_card.reps or 0),
-        "lapses": int(updated_fsrs_card.lapses or 0),
-        "state": _STATE_TO_DB.get(updated_fsrs_card.state, "new"),
+        "reps": int(updated_fsrs_card.step or 0),
+        "lapses": int(card_row.get("lapses") or 0),
+        "state": _STATE_TO_DB.get(updated_fsrs_card.state, "learning"),
     })
 
     create_review(
