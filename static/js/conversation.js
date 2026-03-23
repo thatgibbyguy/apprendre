@@ -32,6 +32,7 @@
     return {
       scenarioId: params.get('scenario_id'),
       learnerId: params.get('learner_id') || '1',
+      resumeSessionId: params.get('session_id'),
     };
   }
 
@@ -400,37 +401,121 @@
   // Session summary
   // ---------------------------------------------------------------------------
 
+  /**
+   * Count learner messages and tally error types from the chat thread DOM.
+   * We read from the DOM (feedback indicators) rather than re-parsing the
+   * transcript, which the server already processed.
+   * @returns {{ messageCount: number, errors: Record<string, number> }}
+   */
+  function collectSessionStats() {
+    const learnerMessages = chatThread
+      ? chatThread.querySelectorAll('.chat-message--learner').length
+      : 0;
+
+    const errors = {};
+    if (chatThread) {
+      chatThread.querySelectorAll('.feedback-indicator').forEach(function (el) {
+        const classes = Array.from(el.classList);
+        const typeClass = classes.find(function (c) {
+          return c.startsWith('feedback-indicator--') && c !== 'feedback-indicator--correct';
+        });
+        if (typeClass) {
+          const type = typeClass.replace('feedback-indicator--', '');
+          errors[type] = (errors[type] || 0) + 1;
+        }
+      });
+    }
+
+    return { messageCount: learnerMessages, errors };
+  }
+
+  /**
+   * Render an error type name as a readable label.
+   * @param {string} type
+   * @returns {string}
+   */
+  function errorTypeLabel(type) {
+    const labels = {
+      recast: 'Recasts (form correction)',
+      prompt: 'Prompts (elicitation)',
+      metalinguistic_cue: 'Grammar cues',
+    };
+    return labels[type] || type;
+  }
+
   function showSummaryPanel(data) {
-    const summary = data.summary || 'Session complete.';
+    const summaryText = data.summary || '';
 
-    const area = document.getElementById('session-summary-area');
-    if (!area) return;
-    area.hidden = false;
+    const overlay = document.getElementById('session-summary-overlay');
+    if (!overlay) return;
 
-    const panel = document.createElement('div');
-    panel.className = 'session-summary';
+    // Populate subtitle
+    const subtitle = document.getElementById('summary-subtitle');
+    if (subtitle) {
+      const { messageCount } = collectSessionStats();
+      subtitle.textContent = messageCount === 1
+        ? '1 message sent this session'
+        : `${messageCount} messages sent this session`;
+    }
 
-    const heading = document.createElement('h2');
-    heading.className = 'session-summary__heading text-lg';
-    heading.textContent = 'Session complete';
-    panel.appendChild(heading);
+    // Populate stats
+    const statsEl = document.getElementById('summary-stats');
+    if (statsEl) {
+      const { errors } = collectSessionStats();
+      const errorEntries = Object.entries(errors);
 
-    const text = document.createElement('p');
-    text.className = 'text-secondary';
-    text.textContent = summary;
-    panel.appendChild(text);
+      if (errorEntries.length === 0) {
+        const noErrors = document.createElement('p');
+        noErrors.className = 'session-summary-stats__clean';
+        noErrors.textContent = 'No errors detected — great work!';
+        statsEl.appendChild(noErrors);
+      } else {
+        errorEntries.forEach(function (entry) {
+          const type = entry[0];
+          const count = entry[1];
+          const row = document.createElement('div');
+          row.className = 'session-summary-stats__row';
 
-    const actions = document.createElement('div');
-    actions.className = 'display-flex gap-sm margin-top';
+          const label = document.createElement('span');
+          label.className = 'session-summary-stats__label';
+          label.textContent = errorTypeLabel(type);
 
-    const dashboardBtn = document.createElement('a');
-    dashboardBtn.href = 'dashboard.html';
-    dashboardBtn.className = 'btn btn-primary';
-    dashboardBtn.textContent = 'Back to dashboard';
-    actions.appendChild(dashboardBtn);
+          const value = document.createElement('span');
+          value.className = 'session-summary-stats__value';
+          value.textContent = count;
 
-    panel.appendChild(actions);
-    area.appendChild(panel);
+          row.appendChild(label);
+          row.appendChild(value);
+          statsEl.appendChild(row);
+        });
+      }
+    }
+
+    // Populate AI narrative feedback
+    const feedbackEl = document.getElementById('summary-feedback');
+    if (feedbackEl && summaryText) {
+      feedbackEl.textContent = summaryText;
+    } else if (feedbackEl) {
+      feedbackEl.hidden = true;
+    }
+
+    // Preserve learner_id on "New conversation" link
+    const newConvBtn = document.getElementById('new-conversation-btn');
+    if (newConvBtn) {
+      const { learnerId } = getParams();
+      if (learnerId) {
+        newConvBtn.href = `play.html?learner_id=${learnerId}`;
+      }
+    }
+
+    // Show modal
+    overlay.hidden = false;
+    overlay.focus();
+
+    // Re-replace feather icons inside modal
+    if (typeof feather !== 'undefined') {
+      feather.replace();
+    }
 
     // Disable chat input
     const inputArea = document.querySelector('.chat-input-area');
@@ -441,12 +526,15 @@
   // End conversation
   // ---------------------------------------------------------------------------
 
-  async function handleEndConversation() {
-    const endBtn = document.getElementById('end-btn');
-    if (endBtn) {
-      endBtn.disabled = true;
-    }
+  function setEndButtonsDisabled(disabled) {
+    ['end-btn', 'end-btn-mobile'].forEach(function (id) {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = disabled;
+    });
+  }
 
+  async function handleEndConversation() {
+    setEndButtonsDisabled(true);
     disableInput();
 
     try {
@@ -455,7 +543,7 @@
     } catch (err) {
       appendToChat(buildErrorMessage('Could not end the session. Please try again.'));
       enableInput();
-      if (endBtn) endBtn.disabled = false;
+      setEndButtonsDisabled(false);
     }
   }
 
@@ -529,9 +617,13 @@
       }
     });
 
-    // End button
+    // End button (desktop sidebar)
     const endBtn = document.getElementById('end-btn');
     if (endBtn) endBtn.addEventListener('click', handleEndConversation);
+
+    // End button (mobile, in chat input row)
+    const endBtnMobile = document.getElementById('end-btn-mobile');
+    if (endBtnMobile) endBtnMobile.addEventListener('click', handleEndConversation);
 
     // Close popovers and vocab tooltips when clicking elsewhere
     document.addEventListener('click', function () {
@@ -547,7 +639,20 @@
     }
 
     // Read URL params
-    const { learnerId, scenarioId } = getParams();
+    const { learnerId, scenarioId, resumeSessionId } = getParams();
+
+    // --- Resume path: session_id in URL ---
+    if (resumeSessionId && !scenarioId) {
+      sessionId = Number(resumeSessionId);
+      appendToChat(
+        buildMessage('ai', 'Welcome back! Continue the conversation where you left off.', 'Partner')
+      );
+      enableInput();
+      if (typeof feather !== 'undefined') {
+        feather.replace();
+      }
+      return;
+    }
 
     if (!scenarioId) {
       appendToChat(

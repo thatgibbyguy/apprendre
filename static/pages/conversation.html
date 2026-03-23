@@ -52,6 +52,10 @@
           <button class="btn btn-ghost btn-icon" id="voice-btn" aria-label="Voice input" disabled>
             <i data-feather="mic"></i>
           </button>
+          <!-- Mobile-only end button (desktop end button is in sidebar) -->
+          <button class="btn btn-ghost btn-icon chat-input-area__end-mobile" id="end-btn-mobile" aria-label="End conversation">
+            <i data-feather="x-circle"></i>
+          </button>
         </div>
       </main>
 
@@ -86,8 +90,31 @@
       </aside>
     </div>
 
-    <!-- Session Summary — shown by JS when conversation ends -->
-    <div id="session-summary-area" class="padding" hidden></div>
+    <!-- Session Summary Modal — shown by JS when conversation ends -->
+    <div id="session-summary-overlay" class="session-summary-overlay" role="dialog" aria-modal="true" aria-labelledby="summary-heading" tabindex="-1" hidden>
+      <div class="session-summary-modal">
+        <h2 id="summary-heading" class="no-margin margin-bottom-sm">Session complete</h2>
+        <p id="summary-subtitle" class="text-secondary no-margin margin-bottom-lg"></p>
+
+        <!-- Stats row -->
+        <div class="session-summary-stats margin-bottom-lg" id="summary-stats"></div>
+
+        <!-- AI narrative feedback -->
+        <div id="summary-feedback" class="session-summary-feedback margin-bottom-lg"></div>
+
+        <!-- Actions -->
+        <div class="display-flex gap-sm">
+          <a href="dashboard.html" class="btn btn-primary btn-icon">
+            <i data-feather="home"></i>
+            <span>Dashboard</span>
+          </a>
+          <a id="new-conversation-btn" href="play.html" class="btn btn-secondary btn-icon">
+            <i data-feather="refresh-cw"></i>
+            <span>New conversation</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
   <script type="module" src="../js/conversation.js"></script>
 </body>
