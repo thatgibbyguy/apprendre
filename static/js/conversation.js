@@ -472,19 +472,20 @@
     const overlay = document.getElementById('session-summary-overlay');
     if (!overlay) return;
 
+    const stats = collectSessionStats();
+
     // Populate subtitle
     const subtitle = document.getElementById('summary-subtitle');
     if (subtitle) {
-      const { messageCount } = collectSessionStats();
-      subtitle.textContent = messageCount === 1
+      subtitle.textContent = stats.messageCount === 1
         ? '1 message sent this session'
-        : `${messageCount} messages sent this session`;
+        : `${stats.messageCount} messages sent this session`;
     }
 
     // Populate stats
     const statsEl = document.getElementById('summary-stats');
     if (statsEl) {
-      const { errors } = collectSessionStats();
+      const { errors } = stats;
       const errorEntries = Object.entries(errors);
 
       if (errorEntries.length === 0) {

@@ -72,7 +72,6 @@ TRANSLATIONS: dict[str, str] = {
     "suivre": "to follow",
     "remplir": "to fill",
     "quitter": "to leave (a place)",
-    "rejoindre": "to join / to meet",
     "s'asseoir": "to sit down",
     "s'endormir": "to fall asleep",
     "se lever": "to get up",
