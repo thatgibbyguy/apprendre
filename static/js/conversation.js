@@ -155,43 +155,66 @@
 
   /**
    * Highlight above-level vocabulary in an AI message bubble.
-   * Wraps matching words in clickable <mark> tags with tooltips
-   * showing the base form (lemma).
+   * Wraps matching words in <mark> tags with tooltip showing the English
+   * translation (or a "new word" fallback when no translation is available).
+   *
    * @param {HTMLElement} messageEl — the .chat-message--ai wrapper
-   * @param {string[]} vocabHelp — items like "dérouler (dérouler)"
+   * @param {Array<{word: string, lemma: string, translation: string|null}>} vocabHelp
+   *   Structured vocab items from the API.  Legacy string format
+   *   "surface (lemma)" is also accepted for backwards-compatibility.
    */
   function highlightVocab(messageEl, vocabHelp) {
     var bubble = messageEl.querySelector('.chat-bubble');
     if (!bubble) return;
 
-    // Build a map of surface form → lemma from "surface (lemma)" entries
+    // Build a map of surface form (lowercase) → tooltip text.
+    // Accepts both the new structured format {word, lemma, translation} and
+    // the legacy string format "surface (lemma)" in case of cache-miss.
     var wordMap = {};
     vocabHelp.forEach(function (entry) {
-      var parts = entry.match(/^(.+?) \((.+?)\)$/);
-      if (parts) {
-        wordMap[parts[1].toLowerCase()] = parts[2];
+      if (entry && typeof entry === 'object' && entry.word) {
+        var tooltipText = entry.translation || 'new word';
+        wordMap[entry.word.toLowerCase()] = tooltipText;
+      } else if (typeof entry === 'string') {
+        // Legacy fallback: "surface (lemma)" — show lemma as tooltip
+        var parts = entry.match(/^(.+?) \((.+?)\)$/);
+        if (parts) {
+          wordMap[parts[1].toLowerCase()] = parts[2];
+        }
       }
     });
 
     var words = Object.keys(wordMap);
     if (!words.length) return;
 
-    // Escape for regex and build a pattern
+    // Escape for regex and build a word-boundary pattern
     var escaped = words.map(function (w) {
       return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     });
     var pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
 
     bubble.innerHTML = bubble.textContent.replace(pattern, function (match) {
-      var lemma = wordMap[match.toLowerCase()] || match;
-      return '<mark class="vocab-highlight" data-lemma="' + lemma + '">' + match + '</mark>';
+      var tooltipText = wordMap[match.toLowerCase()] || 'new word';
+      // Escape HTML in tooltip text to prevent injection
+      var safeTooltip = tooltipText
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      return (
+        '<mark class="vocab-highlight" data-tooltip="' +
+        safeTooltip +
+        '">' +
+        match +
+        '</mark>'
+      );
     });
 
-    // Attach hover tooltips to each highlight
+    // Attach hover tooltips to each highlighted word
     bubble.querySelectorAll('.vocab-highlight').forEach(function (mark) {
       var tooltip = document.createElement('span');
       tooltip.className = 'vocab-tooltip';
-      tooltip.textContent = mark.dataset.lemma;
+      tooltip.textContent = mark.dataset.tooltip;
       mark.appendChild(tooltip);
     });
   }
