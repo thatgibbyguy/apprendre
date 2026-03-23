@@ -33,34 +33,25 @@
   <main id="main">
     <div class="units-container">
 
-      <!-- Welcome bar — lightweight, level badges inline -->
+      <!-- Welcome bar — learner name + level badges -->
       <div class="welcome-bar padding-top">
-        <!-- DYNAMIC: learner name in greeting -->
-        <p class="welcome-bar__greeting text-sm">Bonjour — welcome back.</p>
-        <div class="welcome-bar__levels text-sm" aria-label="Your current levels">
-          <!-- DYNAMIC: levels per skill -->
-          <span class="text-tertiary">Speaking</span>
-          <span class="level-badge text-xs level-badge--a1">A1</span>
-          <span class="text-tertiary">Reading</span>
-          <span class="level-badge text-xs level-badge--a2">A2</span>
-          <span class="text-tertiary">Listening</span>
-          <span class="level-badge text-xs level-badge--a2">A2</span>
+        <p class="welcome-bar__greeting text-sm" id="welcome-greeting" aria-live="polite">Bonjour.</p>
+        <div class="welcome-bar__levels text-sm" id="welcome-levels" aria-label="Your current levels" aria-live="polite">
+          <!-- Populated by JS once learner data loads -->
         </div>
       </div>
 
-      <!-- Primary Action — visually dominant, the main thing to do -->
+      <!-- Primary Action — continue or start conversation -->
       <section class="padding-top-sm padding-bottom" aria-label="Continue learning">
         <div class="units-row">
           <div class="unit-100">
-            <!-- DYNAMIC: scenario name, exchange count, href -->
-            <a href="play.html" class="action-card no-link-style">
+            <a href="play.html" class="action-card no-link-style" id="conversation-card">
               <div class="action-card__icon" aria-hidden="true">
                 <i data-feather="message-square"></i>
               </div>
               <div class="action-card__content">
-                <h1 class="action-card__title text-lg">Continue where you left off</h1>
-                <!-- DYNAMIC: scenario name + progress -->
-                <p class="action-card__subtitle text-sm">Playing with your child at the park — 3 exchanges in</p>
+                <h1 class="action-card__title text-lg" id="conversation-card-title">Continue where you left off</h1>
+                <p class="action-card__subtitle text-sm" id="conversation-card-subtitle">Loading…</p>
               </div>
               <span class="action-card__arrow" aria-hidden="true">
                 <i data-feather="chevron-right"></i>
@@ -70,19 +61,17 @@
         </div>
       </section>
 
-      <!-- Review — secondary action, clearly below primary -->
+      <!-- Review — due card count -->
       <section class="padding-bottom-lg" aria-label="Review due">
         <div class="units-row">
           <div class="unit-60 tablet-unit-100">
-            <!-- DYNAMIC: review count, estimated time, href -->
-            <a href="review.html" class="action-card no-link-style">
+            <a href="review.html" class="action-card no-link-style" id="review-card">
               <div class="action-card__icon" aria-hidden="true">
                 <i data-feather="activity"></i>
               </div>
               <div class="action-card__content">
                 <h2 class="action-card__title text-lg">Due for review</h2>
-                <!-- DYNAMIC: card count + time estimate -->
-                <p class="action-card__subtitle text-sm"><span class="review-count__number text-lg">12</span> cards ready — about 5 minutes</p>
+                <p class="action-card__subtitle text-sm" id="review-card-subtitle">Loading…</p>
               </div>
               <span class="action-card__arrow" aria-hidden="true">
                 <i data-feather="chevron-right"></i>
@@ -92,7 +81,7 @@
         </div>
       </section>
 
-      <!-- Carte — glanceable progress, below the fold is fine -->
+      <!-- Carte — empty state until proficiency tracking is built -->
       <section class="padding-bottom-lg" aria-label="Your carte — progress overview">
         <div class="units-row">
           <div class="unit-100">
@@ -100,103 +89,36 @@
               <h2 class="h4">Your Carte</h2>
               <a href="#" class="text-secondary">View all</a>
             </div>
-
-            <div class="carte-legend text-xs margin-bottom-sm">
-              <div class="carte-legend__item">
-                <span class="carte-legend__swatch carte-legend__swatch--strong" aria-hidden="true"></span>
-                Strong
-              </div>
-              <div class="carte-legend__item">
-                <span class="carte-legend__swatch carte-legend__swatch--working" aria-hidden="true"></span>
-                Working on
-              </div>
-              <div class="carte-legend__item">
-                <span class="carte-legend__swatch carte-legend__swatch--upcoming" aria-hidden="true"></span>
-                Coming up
-              </div>
-              <div class="carte-legend__item">
-                <span class="carte-legend__swatch carte-legend__swatch--struggling" aria-hidden="true"></span>
-                Needs work
-              </div>
-            </div>
-
-            <!-- DYNAMIC: carte cells populated from API -->
-            <div class="carte-grid" role="list" aria-label="Progress by situation">
-              <div class="carte-cell text-sm carte-cell--strong" role="listitem" tabindex="0">
-                <strong>Greetings</strong><br>
-                <span class="carte-cell__detail text-xs">Bonjour, ca va...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--strong" role="listitem" tabindex="0">
-                <strong>Basic needs</strong><br>
-                <span class="carte-cell__detail text-xs">J'ai faim, soif...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--working" role="listitem" tabindex="0">
-                <strong>Playing</strong><br>
-                <span class="carte-cell__detail text-xs">Jouer, courir...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--working" role="listitem" tabindex="0">
-                <strong>Daily routine</strong><br>
-                <span class="carte-cell__detail text-xs">Se lever, manger...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--struggling" role="listitem" tabindex="0">
-                <strong>Past events</strong><br>
-                <span class="carte-cell__detail text-xs">Hier, la semaine...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
-                <strong>At the store</strong><br>
-                <span class="carte-cell__detail text-xs">Acheter, payer...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
-                <strong>Neighbors</strong><br>
-                <span class="carte-cell__detail text-xs">Parler, inviter...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
-                <strong>At the cafe</strong><br>
-                <span class="carte-cell__detail text-xs">Commander, payer...</span>
-              </div>
-              <div class="carte-cell text-sm carte-cell--upcoming" role="listitem" tabindex="0">
-                <strong>Opinions</strong><br>
-                <span class="carte-cell__detail text-xs">Je pense que...</span>
-              </div>
-            </div>
+            <p class="text-sm text-tertiary" id="carte-empty-state">
+              Your progress map will appear here after your first few sessions.
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- Session Summary — collapsible, "check if curious" -->
-      <section class="padding-bottom-xl" aria-label="Last session summary">
+      <!-- Session Summary — collapsible, shows last ended session -->
+      <section class="padding-bottom-xl" aria-label="Last session summary" id="last-session-section" hidden>
         <div class="units-row">
           <div class="unit-60 tablet-unit-100">
-            <!-- DYNAMIC: session summary data from API -->
             <details class="session-summary-details">
               <summary class="text-sm">Last session summary</summary>
               <div class="session-summary text-sm">
                 <div class="session-summary__stat">
                   <span class="session-summary__stat-label">Scenario</span>
-                  <!-- DYNAMIC: scenario name -->
-                  <span class="session-summary__stat-value">Daily routine</span>
+                  <span class="session-summary__stat-value" id="last-session-scenario">—</span>
                 </div>
                 <div class="session-summary__stat">
                   <span class="session-summary__stat-label">Duration</span>
-                  <!-- DYNAMIC: duration -->
-                  <span class="session-summary__stat-value">7 min</span>
+                  <span class="session-summary__stat-value" id="last-session-duration">—</span>
                 </div>
                 <div class="session-summary__stat">
                   <span class="session-summary__stat-label">Exchanges</span>
-                  <!-- DYNAMIC: exchange count -->
-                  <span class="session-summary__stat-value">8</span>
+                  <span class="session-summary__stat-value" id="last-session-exchanges">—</span>
                 </div>
-                <div class="session-summary__stat">
-                  <span class="session-summary__stat-label">New cards created</span>
-                  <!-- DYNAMIC: card count -->
-                  <span class="session-summary__stat-value">3</span>
+                <div id="last-session-feedback-block" hidden>
+                  <h4 class="h6 text-secondary margin-top margin-bottom-xs">Feedback</h4>
+                  <p class="session-summary__feedback-item" id="last-session-feedback-text"></p>
                 </div>
-                <h4 class="h6 text-secondary margin-top margin-bottom-xs">To work on</h4>
-                <!-- DYNAMIC: feedback items from API -->
-                <ul class="session-summary__feedback-list">
-                  <li class="session-summary__feedback-item">Direct object pronouns (le, la, les) before the verb</li>
-                  <li class="session-summary__feedback-item">Reflexive verbs in daily routine context</li>
-                </ul>
               </div>
             </details>
           </div>
@@ -211,5 +133,198 @@
       <p class="text-center text-tertiary">Apprendre — Learn French for your life in Louisiana</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var LEARNER_KEY = 'apprendre_learner_id';
+
+      // Map CEFR level strings to badge modifier classes
+      var LEVEL_BADGE_CLASSES = {
+        'A1': 'level-badge--a1',
+        'A2': 'level-badge--a2',
+        'B1': 'level-badge--b1',
+        'B2': 'level-badge--b2',
+      };
+
+      // Skills displayed in the welcome bar (in order)
+      var SKILL_LABELS = [
+        { key: 'level_speaking', label: 'Speaking' },
+        { key: 'level_listening', label: 'Listening' },
+        { key: 'level_reading', label: 'Reading' },
+      ];
+
+      function redirectToIndex() {
+        window.location.href = 'index.html';
+      }
+
+      function getEl(id) {
+        return document.getElementById(id);
+      }
+
+      // ---------------------------------------------------------------------------
+      // Render helpers
+      // ---------------------------------------------------------------------------
+
+      function renderGreeting(name) {
+        var el = getEl('welcome-greeting');
+        if (!el) return;
+        var firstName = (name || '').split(' ')[0];
+        el.textContent = 'Bonjour, ' + firstName + '.';
+      }
+
+      function renderLevels(learner) {
+        var container = getEl('welcome-levels');
+        if (!container) return;
+        container.innerHTML = '';
+
+        SKILL_LABELS.forEach(function (skill) {
+          var level = learner[skill.key];
+          if (!level) return;
+
+          var labelSpan = document.createElement('span');
+          labelSpan.className = 'text-tertiary';
+          labelSpan.textContent = skill.label;
+
+          var badgeClass = LEVEL_BADGE_CLASSES[level.toUpperCase()] || '';
+          var badgeSpan = document.createElement('span');
+          badgeSpan.className = 'level-badge text-xs ' + badgeClass;
+          badgeSpan.textContent = level.toUpperCase();
+
+          container.appendChild(labelSpan);
+          container.appendChild(badgeSpan);
+        });
+      }
+
+      function renderConversationCard(activeSession) {
+        var card = getEl('conversation-card');
+        var title = getEl('conversation-card-title');
+        var subtitle = getEl('conversation-card-subtitle');
+        if (!card || !title || !subtitle) return;
+
+        if (activeSession && activeSession.scenario) {
+          title.textContent = 'Continue where you left off';
+          var exchanges = activeSession.exchange_count || 0;
+          var exchangeText = exchanges === 1
+            ? '1 exchange in'
+            : exchanges + ' exchanges in';
+          subtitle.textContent = activeSession.scenario + ' — ' + exchangeText;
+          card.href = 'play.html?session_id=' + activeSession.session_id;
+        } else {
+          title.textContent = 'Start a new conversation';
+          subtitle.textContent = 'Choose a scenario and start practising.';
+          card.href = 'play.html';
+        }
+      }
+
+      function renderReviewCard(dueCount) {
+        var subtitle = getEl('review-card-subtitle');
+        if (!subtitle) return;
+
+        if (dueCount === 0) {
+          subtitle.textContent = 'No reviews due — check back later.';
+        } else {
+          var estMin = Math.max(1, Math.round(dueCount * 0.4));
+          var cardText = dueCount === 1 ? '1 card ready' : dueCount + ' cards ready';
+          subtitle.innerHTML =
+            '<span class="review-count__number text-lg">' + dueCount + '</span>'
+            + ' ' + (dueCount === 1 ? 'card ready' : 'cards ready')
+            + ' — about ' + estMin + ' ' + (estMin === 1 ? 'minute' : 'minutes');
+        }
+      }
+
+      function renderLastSession(lastSession) {
+        var section = getEl('last-session-section');
+        if (!section) return;
+
+        if (!lastSession) {
+          section.hidden = true;
+          return;
+        }
+
+        section.hidden = false;
+
+        var scenarioEl = getEl('last-session-scenario');
+        if (scenarioEl) scenarioEl.textContent = lastSession.scenario || '—';
+
+        var durationEl = getEl('last-session-duration');
+        if (durationEl) {
+          if (lastSession.duration_min) {
+            durationEl.textContent = lastSession.duration_min + ' min';
+          } else {
+            durationEl.textContent = '—';
+          }
+        }
+
+        var exchangesEl = getEl('last-session-exchanges');
+        if (exchangesEl) {
+          var count = lastSession.exchange_count || 0;
+          exchangesEl.textContent = count === 1 ? '1 exchange' : count + ' exchanges';
+        }
+
+        var feedbackBlock = getEl('last-session-feedback-block');
+        var feedbackText = getEl('last-session-feedback-text');
+        if (feedbackBlock && feedbackText && lastSession.feedback_summary) {
+          feedbackText.textContent = lastSession.feedback_summary;
+          feedbackBlock.hidden = false;
+        }
+      }
+
+      // ---------------------------------------------------------------------------
+      // Data loading
+      // ---------------------------------------------------------------------------
+
+      function loadDashboard(learnerId) {
+        fetch('/api/learners/dashboard?learner_id=' + learnerId)
+          .then(function (res) {
+            if (res.status === 404) {
+              // Learner ID stored locally is stale — clear and redirect
+              localStorage.removeItem(LEARNER_KEY);
+              redirectToIndex();
+              return null;
+            }
+            if (!res.ok) throw new Error('Dashboard API error: ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            if (!data) return;
+
+            renderGreeting(data.learner.name);
+            renderLevels(data.learner);
+            renderConversationCard(data.active_session);
+            renderReviewCard(data.due_count);
+            renderLastSession(data.last_session);
+
+            // Re-run feather icons in case new SVG elements were added
+            if (typeof feather !== 'undefined') {
+              feather.replace();
+            }
+          })
+          .catch(function (err) {
+            console.error('Failed to load dashboard data:', err);
+            // Show graceful fallback text rather than leaving "Loading…"
+            var subtitle = getEl('conversation-card-subtitle');
+            if (subtitle) subtitle.textContent = 'Unable to load — try refreshing.';
+            var reviewSub = getEl('review-card-subtitle');
+            if (reviewSub) reviewSub.textContent = 'Unable to load — try refreshing.';
+          });
+      }
+
+      // ---------------------------------------------------------------------------
+      // Boot
+      // ---------------------------------------------------------------------------
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var learnerId = localStorage.getItem(LEARNER_KEY);
+        if (!learnerId) {
+          redirectToIndex();
+          return;
+        }
+        loadDashboard(learnerId);
+      });
+
+    }());
+  </script>
 </body>
 </html>
