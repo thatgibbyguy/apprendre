@@ -37,6 +37,14 @@
         </select>
       </section>
 
+      <!-- In-progress conversations -->
+      <section id="in-progress-section" class="margin-bottom-xl" hidden>
+        <h2 class="h5 text-secondary margin-bottom-sm">Continue a conversation</h2>
+        <div id="in-progress-list" class="units-row gap-sm equal-height">
+          <!-- Inserted by JS -->
+        </div>
+      </section>
+
       <!-- Scenario cards -->
       <section>
         <h2 class="h5 text-secondary margin-bottom-sm">Choose a scenario</h2>
@@ -54,6 +62,8 @@
 
       const learnerSelect = document.getElementById('learner-select');
       const scenarioList = document.getElementById('scenario-list');
+      const inProgressSection = document.getElementById('in-progress-section');
+      const inProgressList = document.getElementById('in-progress-list');
 
       let learners, scenarios;
       try {
@@ -78,10 +88,18 @@
         learnerSelect.innerHTML = '<option value="">No learners found — run: python3 -m server.seed</option>';
         return;
       }
+
+      // Honour learner_id from query string if present
+      const urlParams = new URLSearchParams(window.location.search);
+      const defaultLearnerId = urlParams.get('learner_id');
+
       for (const l of learners) {
         const opt = document.createElement('option');
         opt.value = l.id;
         opt.textContent = `${l.name}  (Speaking: ${l.level_speaking})`;
+        if (defaultLearnerId && String(l.id) === String(defaultLearnerId)) {
+          opt.selected = true;
+        }
         learnerSelect.appendChild(opt);
       }
 
@@ -125,6 +143,98 @@
       }
 
       if (typeof feather !== 'undefined') feather.replace();
+
+      // Load in-progress conversations for the selected learner
+      async function loadInProgress(learnerId) {
+        inProgressSection.hidden = true;
+        inProgressList.innerHTML = '';
+
+        if (!learnerId) return;
+
+        let conversations;
+        try {
+          const res = await fetch(`/api/conversation/?learner_id=${learnerId}`);
+          if (!res.ok) return;
+          const data = await res.json();
+          conversations = data.conversations || [];
+        } catch (err) {
+          console.warn('Could not load in-progress conversations:', err);
+          return;
+        }
+
+        // Filter to sessions that haven't ended yet
+        const active = conversations.filter(c => !c.ended_at);
+        if (active.length === 0) return;
+
+        for (const session of active) {
+          const col = document.createElement('div');
+          col.className = 'unit-50 tablet-unit-100';
+
+          // Format the started_at timestamp
+          let timeAgo = '';
+          if (session.started_at) {
+            try {
+              const started = new Date(session.started_at);
+              const diffMs = Date.now() - started.getTime();
+              const diffMins = Math.floor(diffMs / 60000);
+              if (diffMins < 1) {
+                timeAgo = 'just now';
+              } else if (diffMins < 60) {
+                timeAgo = `${diffMins}m ago`;
+              } else {
+                const diffHours = Math.floor(diffMins / 60);
+                if (diffHours < 24) {
+                  timeAgo = `${diffHours}h ago`;
+                } else {
+                  const diffDays = Math.floor(diffHours / 24);
+                  timeAgo = `${diffDays}d ago`;
+                }
+              }
+            } catch (e) { /* ignore */ }
+          }
+
+          const scenarioLabel = session.scenario || 'Conversation';
+
+          const card = document.createElement('a');
+          card.className = 'action-card in-progress-card no-link-style';
+          card.href = `conversation.html?session_id=${session.id}&learner_id=${learnerId}`;
+
+          card.innerHTML = `
+            <div class="action-card__icon action-card__icon--resume" aria-hidden="true">
+              <i data-feather="play-circle"></i>
+            </div>
+            <div class="action-card__content">
+              <h3 class="action-card__title">${escapeHtml(scenarioLabel)}</h3>
+              <p class="action-card__subtitle text-sm">Started ${timeAgo}</p>
+            </div>
+            <span class="action-card__arrow in-progress-card__resume text-sm">
+              Resume <i data-feather="arrow-right"></i>
+            </span>
+          `;
+
+          col.appendChild(card);
+          inProgressList.appendChild(col);
+        }
+
+        inProgressSection.hidden = false;
+        if (typeof feather !== 'undefined') feather.replace();
+      }
+
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      // Initial load
+      loadInProgress(learnerSelect.value);
+
+      // Reload when learner changes
+      learnerSelect.addEventListener('change', () => {
+        loadInProgress(learnerSelect.value);
+      });
     });
   </script>
 </body>
